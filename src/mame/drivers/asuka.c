@@ -1777,3 +1777,124 @@ GAME( 1993, earthjkr,  0,        galmedes, earthjkr, driver_device, 0, ROT270, "
 GAME( 1993, earthjkrp, earthjkr, galmedes, earthjkr, driver_device, 0, ROT270, "Visco",                     "U.N. Defense Force: Earth Joker (Japan, prototype?)", GAME_SUPPORTS_SAVE )
 
 GAME( 1994, eto,       0,        eto,      eto, driver_device,      0, ROT0,   "Visco",                     "Kokontouzai Eto Monogatari (Japan)", GAME_SUPPORTS_SAVE )
+
+/******************************** 
+ * 
+ * Here starts mods for link mode 
+ *
+ *******************************/
+
+ static ADDRESS_MAP_START( cadash_map_2, AS_PROGRAM, 16, asuka_state )
+	AM_RANGE(0x000000, 0x07ffff) AM_ROM AM_REGION("maincpu",0)
+//	AM_RANGE(0x080000, 0x080003) AM_WRITE(asuka_spritectrl_w)
+//	AM_RANGE(0x0c0000, 0x0c0001) AM_READNOP AM_DEVWRITE8("tc0140syt", tc0140syt_device, master_port_w, 0x00ff)
+//	AM_RANGE(0x0c0002, 0x0c0003) AM_DEVREADWRITE8("tc0140syt", tc0140syt_device, master_comm_r, master_comm_w, 0x00ff)
+	AM_RANGE(0x100000, 0x107fff) AM_RAM
+//	AM_RANGE(0x800000, 0x800fff) AM_READWRITE(cadash_share_r,cadash_share_w)    /* network ram */
+//	AM_RANGE(0x900000, 0x90000f) AM_DEVREADWRITE8("tc0220ioc", tc0220ioc_device, read, write, 0x00ff)
+//	AM_RANGE(0xa00000, 0xa0000f) AM_DEVREADWRITE("tc0110pcr", tc0110pcr_device, word_r, step1_4bpg_word_w)
+//	AM_RANGE(0xb00000, 0xb03fff) AM_DEVREADWRITE("pc090oj", pc090oj_device, word_r, word_w)  /* sprite ram */
+//	AM_RANGE(0xc00000, 0xc0ffff) AM_DEVREADWRITE("tc0100scn", tc0100scn_device, word_r, word_w)    /* tilemaps */
+//	AM_RANGE(0xc20000, 0xc2000f) AM_DEVREADWRITE("tc0100scn", tc0100scn_device, ctrl_word_r, ctrl_word_w)
+ADDRESS_MAP_END
+ 
+static MACHINE_CONFIG_START( cadashjl, asuka_state )
+
+	/* basic machine hardware */
+	MCFG_CPU_ADD("maincpu", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
+	MCFG_CPU_PROGRAM_MAP(cadash_map)
+	MCFG_CPU_VBLANK_INT_DRIVER("screen", asuka_state,  cadash_interrupt)
+
+	MCFG_CPU_ADD("audiocpu", Z80, XTAL_8MHz/2)  /* verified on pcb */
+	MCFG_CPU_PROGRAM_MAP(cadash_z80_map)
+
+	MCFG_CPU_ADD("subcpu", Z180, 4000000)   /* 4 MHz ??? */
+	MCFG_CPU_PROGRAM_MAP(cadash_sub_map)
+	MCFG_CPU_IO_MAP(cadash_sub_io)
+
+	MCFG_CPU_ADD("maincpu_2", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
+	MCFG_CPU_PROGRAM_MAP(cadash_map_2)
+//	MCFG_CPU_VBLANK_INT_DRIVER("screen_2", asuka_state,  cadash_interrupt)
+
+
+	MCFG_QUANTUM_TIME(attotime::from_hz(600))
+
+	MCFG_DEVICE_ADD("tc0220ioc", TC0220IOC, 0)
+	MCFG_TC0220IOC_READ_0_CB(IOPORT("DSWA"))
+	MCFG_TC0220IOC_READ_1_CB(IOPORT("DSWB"))
+	MCFG_TC0220IOC_READ_2_CB(IOPORT("IN0"))
+	MCFG_TC0220IOC_READ_3_CB(IOPORT("IN1"))
+	MCFG_TC0220IOC_READ_7_CB(IOPORT("IN2"))
+
+	/* video hardware */
+	MCFG_SCREEN_ADD("screen", RASTER)
+	MCFG_SCREEN_REFRESH_RATE(60)
+	MCFG_SCREEN_VBLANK_TIME(ATTOSECONDS_IN_USEC(0))
+	MCFG_SCREEN_SIZE(40*8, 32*8)
+	MCFG_SCREEN_VISIBLE_AREA(0*8, 40*8-1, 2*8, 32*8-1)
+	MCFG_SCREEN_UPDATE_DRIVER(asuka_state, screen_update_bonzeadv)
+	MCFG_SCREEN_VBLANK_DRIVER(asuka_state, screen_eof_asuka)
+	MCFG_SCREEN_PALETTE("palette")
+
+	MCFG_GFXDECODE_ADD("gfxdecode", "palette", asuka)
+	MCFG_PALETTE_ADD("palette", 4096)
+
+	MCFG_DEVICE_ADD("pc090oj", PC090OJ, 0)
+	MCFG_PC090OJ_OFFSETS(0, 8)
+	MCFG_PC090OJ_USEBUFFER(1)
+	MCFG_PC090OJ_GFXDECODE("gfxdecode")
+	MCFG_PC090OJ_PALETTE("palette")
+
+	MCFG_DEVICE_ADD("tc0100scn", TC0100SCN, 0)
+	MCFG_TC0100SCN_GFX_REGION(1)
+	MCFG_TC0100SCN_TX_REGION(2)
+	MCFG_TC0100SCN_OFFSETS(1, 0)
+	MCFG_TC0100SCN_GFXDECODE("gfxdecode")
+	MCFG_TC0100SCN_PALETTE("palette")
+
+	MCFG_TC0110PCR_ADD("tc0110pcr")
+	MCFG_TC0110PCR_PALETTE("palette")
+
+	/* sound hardware */
+	MCFG_SPEAKER_STANDARD_MONO("mono")
+
+	MCFG_YM2151_ADD("ymsnd", XTAL_8MHz/2)   /* verified on pcb */
+	MCFG_YM2151_IRQ_HANDLER(INPUTLINE("audiocpu", 0))
+	MCFG_YM2151_PORT_WRITE_HANDLER(WRITE8(asuka_state,sound_bankswitch_2151_w))
+	MCFG_SOUND_ROUTE(0, "mono", 0.50)
+	MCFG_SOUND_ROUTE(1, "mono", 0.50)
+
+	MCFG_DEVICE_ADD("tc0140syt", TC0140SYT, 0)
+	MCFG_TC0140SYT_MASTER_CPU("maincpu")
+	MCFG_TC0140SYT_SLAVE_CPU("audiocpu")
+MACHINE_CONFIG_END
+
+
+ROM_START( cadashjl )
+	ROM_REGION( 0x80000, "maincpu", 0 )     /* 512k for 68000 code */
+	ROM_LOAD16_BYTE( "c21_04-2.ic11",  0x00000, 0x20000, CRC(7a9c1828) SHA1(491eea29efc47159ad904e734a980c444bfbd8aa) )
+	ROM_LOAD16_BYTE( "c21_06-2.ic15",  0x00001, 0x20000, CRC(c9d6440a) SHA1(2555af4c4043811a53e9f069d97571672237c18e) )
+	ROM_LOAD16_BYTE( "c21_03-2.ic10",  0x40000, 0x20000, CRC(30afc320) SHA1(d4c1d1ef30be633244c6b71b24491d6eb3562cef) )
+	ROM_LOAD16_BYTE( "c21_05-2.ic14",  0x40001, 0x20000, CRC(2bc93209) SHA1(3352659ea9364ca9462343f03e26dd10087d6834) )
+
+	ROM_REGION( 0x80000, "gfx1", 0 )
+	ROM_LOAD( "c21-02.9",  0x00000, 0x80000, CRC(205883b9) SHA1(5aafee8cab3f949a7db91bcc26912f331041b51e) ) /* SCR tiles (8 x 8) */
+
+	ROM_REGION( 0x80000, "gfx2", 0 )
+	ROM_LOAD( "c21-01.1",  0x00000, 0x80000, CRC(1ff6f39c) SHA1(742f296efc8073fafa73da2c8d7d26ca9514b6bf) ) /* Sprites (16 x 16) */
+
+	ROM_REGION( 0x1c000, "audiocpu", 0 )    /* sound cpu */
+	ROM_LOAD( "c21-08.38",   0x00000, 0x04000, CRC(dca495a0) SHA1(4e0f401f1b967da75f33fd7294860ad0b4bf2dce) )
+	ROM_CONTINUE(            0x10000, 0x0c000 ) /* banked stuff */
+
+	ROM_REGION( 0x08000, "subcpu", ROMREGION_ERASE00 )  /* HD64180RP8 code (link) */
+	ROM_LOAD( "c21-07.57",   0x00000, 0x08000, CRC(f02292bd) SHA1(0a5c06a048ad67f90e0d766b504582e9eef035f7) )
+
+	ROM_REGION( 0x0800, "plds", 0 )
+	ROM_LOAD( "pal16l8b-c21-09.ic34",   0x0000, 0x0104, CRC(4b296700) SHA1(79d6c8fb13e30795d9c1f49885ada658f9722b68) )
+	ROM_LOAD( "pal16l8b-c21-10.ic45",   0x0200, 0x0104, CRC(35642f00) SHA1(a04403536b0ef7e8e7251dfc47274a6c8772fd2d) )
+	ROM_LOAD( "pal16l8b-c21-11-1.ic46", 0x0400, 0x0104, CRC(f4791e24) SHA1(7e3bbffec7b8f9171e6e09706e5622fef3c99ca0) )
+	ROM_LOAD( "pal20l8b-c21-12.ic47",   0x0600, 0x0144, CRC(bbc2cc97) SHA1(d4a68f28e0d3f5a3b39ecc25640bc9197ad0260b) )
+ROM_END
+
+GAME( 1989, cadashjl,   cadash,   cadashjl,   cadashj, driver_device,  0, ROT0,   "Taito Corporation",         "Cadash (Japan, version 2, with Link)", GAME_SUPPORTS_SAVE )
