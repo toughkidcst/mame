@@ -233,6 +233,7 @@ void asuka_state::device_timer(emu_timer &timer, device_timer_id id, int param, 
 	switch (id)
 	{
 	case TIMER_CADASH_INTERRUPT5:
+		// lan related irq?
 		m_maincpu->set_input_line(5, HOLD_LINE);
 		break;
 	default:
@@ -252,6 +253,7 @@ INTERRUPT_GEN_MEMBER(asuka_state::cadash_interrupt)
             SOUND
 ************************************************/
 
+// TODO: lolwut?
 WRITE8_MEMBER(asuka_state::sound_bankswitch_w)
 {
 	membank("bank1")->set_entry(data & 0x03);
@@ -1803,7 +1805,7 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 	/* basic machine hardware */
 	MCFG_CPU_ADD("maincpu", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
 	MCFG_CPU_PROGRAM_MAP(cadash_map)
-	MCFG_CPU_VBLANK_INT_DRIVER("screen", asuka_state,  cadash_interrupt)
+	MCFG_CPU_VBLANK_INT_DRIVER("screen", asuka_state,  irq4_line_hold)
 
 	MCFG_CPU_ADD("audiocpu", Z80, XTAL_8MHz/2)  /* verified on pcb */
 	MCFG_CPU_PROGRAM_MAP(cadash_z80_map)
@@ -1814,7 +1816,7 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 
 	MCFG_CPU_ADD("maincpu_2", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
 	MCFG_CPU_PROGRAM_MAP(cadash_map_2)
-//	MCFG_CPU_VBLANK_INT_DRIVER("screen_2", asuka_state,  cadash_interrupt)
+	//MCFG_CPU_VBLANK_INT_DRIVER("screen_2", asuka_state,  irq4_line_hold)
 
 
 	MCFG_QUANTUM_TIME(attotime::from_hz(600))
@@ -1836,6 +1838,17 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 	MCFG_SCREEN_VBLANK_DRIVER(asuka_state, screen_eof_asuka)
 	MCFG_SCREEN_PALETTE("palette")
 
+	/*
+	MCFG_SCREEN_ADD("screen_2", RASTER)
+	MCFG_SCREEN_REFRESH_RATE(60)
+	MCFG_SCREEN_VBLANK_TIME(ATTOSECONDS_IN_USEC(0))
+	MCFG_SCREEN_SIZE(40*8, 32*8)
+	MCFG_SCREEN_VISIBLE_AREA(0*8, 40*8-1, 2*8, 32*8-1)
+	MCFG_SCREEN_UPDATE_DRIVER(asuka_state, screen_update_bonzeadv)
+	MCFG_SCREEN_VBLANK_DRIVER(asuka_state, screen_eof_asuka)
+	MCFG_SCREEN_PALETTE("palette")
+	*/
+	
 	MCFG_GFXDECODE_ADD("gfxdecode", "palette", asuka)
 	MCFG_PALETTE_ADD("palette", 4096)
 
