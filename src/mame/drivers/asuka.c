@@ -311,6 +311,16 @@ WRITE16_MEMBER(asuka_state::cadash_share_w)
 	m_cadash_shared_ram[offset] = data & 0xff;
 }
 
+READ16_MEMBER(cadash_state::cadash_share_r_2)
+{
+	return m_cadash_shared_ram_2[offset];
+}
+
+WRITE16_MEMBER(cadash_state::cadash_share_w_2)
+{
+	m_cadash_shared_ram_2[offset] = data & 0xff;
+}
+
 
 /***********************************************************
              MEMORY STRUCTURES
@@ -1893,7 +1903,7 @@ GAME( 1994, eto,       0,        eto,      eto, driver_device,      0, ROT0,   "
 	AM_RANGE(0x0c0000, 0x0c0001) AM_READNOP AM_DEVWRITE8("tc0140syt_2", tc0140syt_device, master_port_w, 0x00ff)
 	AM_RANGE(0x0c0002, 0x0c0003) AM_DEVREADWRITE8("tc0140syt_2", tc0140syt_device, master_comm_r, master_comm_w, 0x00ff)
 	AM_RANGE(0x100000, 0x107fff) AM_RAM
-//	AM_RANGE(0x800000, 0x800fff) AM_READWRITE(cadash_share_r,cadash_share_w)    /* network ram */
+	AM_RANGE(0x800000, 0x800fff) AM_READWRITE(cadash_share_r_2,cadash_share_w_2)    /* network ram */
 	AM_RANGE(0x900000, 0x90000f) AM_DEVREADWRITE8("tc0220ioc_2", tc0220ioc_device, read, write, 0x00ff)
 	AM_RANGE(0xa00000, 0xa0000f) AM_DEVREADWRITE("tc0110pcr_2", tc0110pcr_device, word_r, step1_4bpg_word_w)
 	AM_RANGE(0xb00000, 0xb03fff) AM_DEVREADWRITE("pc090oj_2", pc090oj_device, word_r, word_w)  /* sprite ram */
@@ -1908,6 +1918,15 @@ static ADDRESS_MAP_START( cadash_z80_map_2, AS_PROGRAM, 8, asuka_state )
 	AM_RANGE(0x9000, 0x9001) AM_DEVREADWRITE("ymsnd_2", ym2151_device, read, write)
 	AM_RANGE(0xa000, 0xa000) AM_DEVWRITE("tc0140syt_2", tc0140syt_device, slave_port_w)
 	AM_RANGE(0xa001, 0xa001) AM_DEVREADWRITE("tc0140syt_2", tc0140syt_device, slave_comm_r, slave_comm_w)
+ADDRESS_MAP_END
+
+static ADDRESS_MAP_START( cadash_sub_map_2, AS_PROGRAM, 8, cadash_state )
+	AM_RANGE(0x0000, 0x7fff) AM_ROM AM_REGION("subcpu",0)
+	AM_RANGE(0x8000, 0x87ff) AM_RAM AM_SHARE("sharedram_2")
+ADDRESS_MAP_END
+
+static ADDRESS_MAP_START( cadash_sub_io_2, AS_IO, 8, cadash_state )
+	AM_RANGE(0x00, 0x3f) AM_RAM // z180 internal I/O regs
 ADDRESS_MAP_END
  
 
@@ -1931,6 +1950,10 @@ static MACHINE_CONFIG_START( cadashjl, cadash_state )
 
 	MCFG_CPU_ADD("audiocpu_2", Z80, XTAL_8MHz/2)  /* verified on pcb */
 	MCFG_CPU_PROGRAM_MAP(cadash_z80_map_2)
+
+	MCFG_CPU_ADD("subcpu_2", Z180, 4000000)   /* 4 MHz ??? */
+	MCFG_CPU_PROGRAM_MAP(cadash_sub_map_2)
+	MCFG_CPU_IO_MAP(cadash_sub_io_2)
 
 
 	MCFG_QUANTUM_TIME(attotime::from_hz(600))

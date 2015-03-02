@@ -94,6 +94,7 @@ class cadash_state : public asuka_state
 public:
 	cadash_state(const machine_config &mconfig, device_type type, const char *tag)
 		: asuka_state(mconfig, type, tag),
+		m_cadash_shared_ram_2(*this, "sharedram_2"),
 		m_pc090oj_2(*this, "pc090oj_2"),
 		m_tc0100scn_2(*this, "tc0100scn_2"),
 		m_tc0110pcr_2(*this, "tc0110pcr_2"),
@@ -102,6 +103,7 @@ public:
 	//required_device<cpu_device> m_maincpu;
 	//required_device<cpu_device> m_audiocpu;
 	//optional_device<msm5205_device> m_msm;
+	optional_shared_ptr<UINT8> m_cadash_shared_ram_2;
 	required_device<pc090oj_device> m_pc090oj_2;
 	required_device<tc0100scn_device> m_tc0100scn_2;
 	required_device<tc0110pcr_device> m_tc0110pcr_2;
@@ -115,6 +117,8 @@ public:
 
 	UINT32 screen_update_cadash(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	void screen_eof_cadash(screen_device &screen, bool state);
+	DECLARE_READ16_MEMBER(cadash_share_r_2);
+	DECLARE_WRITE16_MEMBER(cadash_share_w_2);
 
 };
 
