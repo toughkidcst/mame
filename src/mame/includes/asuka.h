@@ -23,6 +23,7 @@ public:
 		m_cadash_shared_ram(*this, "sharedram"),
 		m_maincpu(*this, "maincpu"),
 		m_audiocpu(*this, "audiocpu"),
+		m_subcpu(*this, "subcpu"),
 		m_msm(*this, "msm"),
 		m_pc090oj(*this, "pc090oj"),
 		m_tc0100scn(*this, "tc0100scn"),
@@ -53,6 +54,7 @@ public:
 	/* devices */
 	required_device<cpu_device> m_maincpu;
 	required_device<cpu_device> m_audiocpu;
+	optional_device<cpu_device> m_subcpu;
 	optional_device<msm5205_device> m_msm;
 	required_device<pc090oj_device> m_pc090oj;
 	required_device<tc0100scn_device> m_tc0100scn;
@@ -94,6 +96,7 @@ class cadash_state : public asuka_state
 public:
 	cadash_state(const machine_config &mconfig, device_type type, const char *tag)
 		: asuka_state(mconfig, type, tag),
+		m_subcpu_2(*this, "subcpu_2"),
 		m_cadash_shared_ram_2(*this, "sharedram_2"),
 		m_pc090oj_2(*this, "pc090oj_2"),
 		m_tc0100scn_2(*this, "tc0100scn_2"),
@@ -103,6 +106,7 @@ public:
 	//required_device<cpu_device> m_maincpu;
 	//required_device<cpu_device> m_audiocpu;
 	//optional_device<msm5205_device> m_msm;
+	optional_device<cpu_device> m_subcpu_2;
 	optional_shared_ptr<UINT8> m_cadash_shared_ram_2;
 	required_device<pc090oj_device> m_pc090oj_2;
 	required_device<tc0100scn_device> m_tc0100scn_2;

@@ -1928,6 +1928,14 @@ ADDRESS_MAP_END
 static ADDRESS_MAP_START( cadash_sub_io_2, AS_IO, 8, cadash_state )
 	AM_RANGE(0x00, 0x3f) AM_RAM // z180 internal I/O regs
 ADDRESS_MAP_END
+
+static ADDRESS_MAP_START( cadash_sub_data, AS_DATA, 8, cadash_state )
+
+ADDRESS_MAP_END
+
+static ADDRESS_MAP_START( cadash_sub_data_2, AS_DATA, 8, cadash_state )
+	
+ADDRESS_MAP_END
  
 
 static MACHINE_CONFIG_START( cadashjl, cadash_state )
@@ -1943,6 +1951,7 @@ static MACHINE_CONFIG_START( cadashjl, cadash_state )
 	MCFG_CPU_ADD("subcpu", Z180, 4000000)   /* 4 MHz ??? */
 	MCFG_CPU_PROGRAM_MAP(cadash_sub_map)
 	MCFG_CPU_IO_MAP(cadash_sub_io)
+	MCFG_CPU_DATA_MAP(cadash_sub_data)
 
 	MCFG_CPU_ADD("maincpu_2", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
 	MCFG_CPU_PROGRAM_MAP(cadash_map_2)
@@ -1954,6 +1963,7 @@ static MACHINE_CONFIG_START( cadashjl, cadash_state )
 	MCFG_CPU_ADD("subcpu_2", Z180, 4000000)   /* 4 MHz ??? */
 	MCFG_CPU_PROGRAM_MAP(cadash_sub_map_2)
 	MCFG_CPU_IO_MAP(cadash_sub_io_2)
+	MCFG_CPU_DATA_MAP(cadash_sub_data_2)
 
 
 	MCFG_QUANTUM_TIME(attotime::from_hz(600))

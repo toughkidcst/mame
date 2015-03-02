@@ -121,6 +121,7 @@ z180_device::z180_device(const machine_config &mconfig, const char *tag, device_
 	: cpu_device(mconfig, Z180, "Z180", tag, owner, clock, "z180", __FILE__)
 	, m_program_config("program", ENDIANNESS_LITTLE, 8, 20, 0)
 	, m_io_config("io", ENDIANNESS_LITTLE, 8, 16, 0)
+	, m_data_config("data", ENDIANNESS_LITTLE, 8, 16, 0)
 {
 }
 
@@ -847,22 +848,25 @@ data |= 0x02; // kludge for 20pacgal
 		break;
 
 	case Z180_TDR0:
-		data = IO_TDR0 & Z180_TDR0_RMASK;
+		data = m_data->read_byte(0); //IO_TDR0 & Z180_TDR0_RMASK;
+		
 		LOG(("Z180 '%s' TDR0   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_TDR1:
-		data = IO_TDR1 & Z180_TDR1_RMASK;
+		data = m_data->read_byte(1); //IO_TDR1 & Z180_TDR1_RMASK;
 		LOG(("Z180 '%s' TDR1   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_RDR0:
-		data = IO_RDR0 & Z180_RDR0_RMASK;
+		data = m_data->read_byte(2);
+		//data = IO_RDR0 & Z180_RDR0_RMASK;
 		LOG(("Z180 '%s' RDR0   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_RDR1:
-		data = IO_RDR1 & Z180_RDR1_RMASK;
+		data = m_data->read_byte(3);
+		//data = IO_RDR1 & Z180_RDR1_RMASK;
 		LOG(("Z180 '%s' RDR1   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
@@ -1276,22 +1280,29 @@ void z180_device::z180_writecontrol(offs_t port, UINT8 data)
 
 	case Z180_TDR0:
 		LOG(("Z180 '%s' TDR0   wr $%02x ($%02x)\n", tag(), data,  data & Z180_TDR0_WMASK));
+		m_data->write_byte(0,data);
 		IO_TDR0 = (IO_TDR0 & ~Z180_TDR0_WMASK) | (data & Z180_TDR0_WMASK);
 		break;
 
 	case Z180_TDR1:
 		LOG(("Z180 '%s' TDR1   wr $%02x ($%02x)\n", tag(), data,  data & Z180_TDR1_WMASK));
+		m_data->write_byte(1,data);
 		IO_TDR1 = (IO_TDR1 & ~Z180_TDR1_WMASK) | (data & Z180_TDR1_WMASK);
 		break;
 
 	case Z180_RDR0:
 		LOG(("Z180 '%s' RDR0   wr $%02x ($%02x)\n", tag(), data,  data & Z180_RDR0_WMASK));
+		m_data->write_byte(2,data);
+
 		IO_RDR0 = (IO_RDR0 & ~Z180_RDR0_WMASK) | (data & Z180_RDR0_WMASK);
 		break;
 
 	case Z180_RDR1:
 		LOG(("Z180 '%s' RDR1   wr $%02x ($%02x)\n", tag(), data,  data & Z180_RDR1_WMASK));
+		m_data->write_byte(3,data);
+
 		IO_RDR1 = (IO_RDR1 & ~Z180_RDR1_WMASK) | (data & Z180_RDR1_WMASK);
+
 		break;
 
 	case Z180_CNTR:
@@ -1992,6 +2003,7 @@ void z180_device::device_start()
 
 	m_program = &space(AS_PROGRAM);
 	m_direct = &m_program->direct();
+	m_data = &space(AS_DATA);
 	m_iospace = &space(AS_IO);
 
 	/* set up the state table */

@@ -9,12 +9,15 @@ WRITE16_MEMBER(asuka_state::asuka_spritectrl_w)
 {
 	/* Bits 2-5 are color bank; in asuka games bit 0 is global priority */
 	m_pc090oj->set_sprite_ctrl(((data & 0x3c) >> 2) | ((data & 0x1) << 15));
+	m_subcpu->set_input_line(INPUT_LINE_RESET, (data & 2) ? CLEAR_LINE : ASSERT_LINE);
 }
 
 WRITE16_MEMBER(cadash_state::asuka_spritectrl_w_2)
 {
 	/* Bits 2-5 are color bank; in asuka games bit 0 is global priority */
 	m_pc090oj_2->set_sprite_ctrl(((data & 0x3c) >> 2) | ((data & 0x1) << 15));
+	m_subcpu_2->set_input_line(INPUT_LINE_RESET, (data & 2) ? CLEAR_LINE : ASSERT_LINE);
+
 }
 
 /**************************************************************
