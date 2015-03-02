@@ -1929,12 +1929,12 @@ static ADDRESS_MAP_START( cadash_sub_io_2, AS_IO, 8, cadash_state )
 	AM_RANGE(0x00, 0x3f) AM_RAM // z180 internal I/O regs
 ADDRESS_MAP_END
 
+
 static ADDRESS_MAP_START( cadash_sub_data, AS_DATA, 8, cadash_state )
 
 ADDRESS_MAP_END
 
 static ADDRESS_MAP_START( cadash_sub_data_2, AS_DATA, 8, cadash_state )
-	
 ADDRESS_MAP_END
  
 
@@ -1948,7 +1948,7 @@ static MACHINE_CONFIG_START( cadashjl, cadash_state )
 	MCFG_CPU_ADD("audiocpu", Z80, XTAL_8MHz/2)  /* verified on pcb */
 	MCFG_CPU_PROGRAM_MAP(cadash_z80_map)
 
-	MCFG_CPU_ADD("subcpu", Z180, 4000000)   /* 4 MHz ??? */
+	MCFG_CPU_ADD("subcpu", Z180, 10000000)   /* 4 MHz ??? */
 	MCFG_CPU_PROGRAM_MAP(cadash_sub_map)
 	MCFG_CPU_IO_MAP(cadash_sub_io)
 	MCFG_CPU_DATA_MAP(cadash_sub_data)
@@ -1960,7 +1960,7 @@ static MACHINE_CONFIG_START( cadashjl, cadash_state )
 	MCFG_CPU_ADD("audiocpu_2", Z80, XTAL_8MHz/2)  /* verified on pcb */
 	MCFG_CPU_PROGRAM_MAP(cadash_z80_map_2)
 
-	MCFG_CPU_ADD("subcpu_2", Z180, 4000000)   /* 4 MHz ??? */
+	MCFG_CPU_ADD("subcpu_2", Z180, 10000000)   /* 4 MHz ??? */
 	MCFG_CPU_PROGRAM_MAP(cadash_sub_map_2)
 	MCFG_CPU_IO_MAP(cadash_sub_io_2)
 	MCFG_CPU_DATA_MAP(cadash_sub_data_2)

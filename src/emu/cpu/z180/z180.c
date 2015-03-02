@@ -817,55 +817,61 @@ UINT8 z180_device::z180_readcontrol(offs_t port)
 	switch (port + Z180_CNTLA0)
 	{
 	case Z180_CNTLA0:
-		data = IO_CNTLA0 & Z180_CNTLA0_RMASK;
+		data = m_data->read_byte(0);
+//		data = IO_CNTLA0 & Z180_CNTLA0_RMASK;
 		LOG(("Z180 '%s' CNTLA0 rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_CNTLA1:
-		data = IO_CNTLA1 & Z180_CNTLA1_RMASK;
+		data = m_data->read_byte(1);
+		//data = IO_CNTLA1 & Z180_CNTLA1_RMASK;
 		LOG(("Z180 '%s' CNTLA1 rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_CNTLB0:
-		data = IO_CNTLB0 & Z180_CNTLB0_RMASK;
+		data = m_data->read_byte(2);
+		//data = IO_CNTLB0 & Z180_CNTLB0_RMASK;
 		LOG(("Z180 '%s' CNTLB0 rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_CNTLB1:
-		data = IO_CNTLB1 & Z180_CNTLB1_RMASK;
+		data = m_data->read_byte(3);
+		//data = IO_CNTLB1 & Z180_CNTLB1_RMASK;
 		LOG(("Z180 '%s' CNTLB1 rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_STAT0:
-		data = IO_STAT0 & Z180_STAT0_RMASK;
+		data = m_data->read_byte(4);
+		//data = IO_STAT0 & Z180_STAT0_RMASK;
 data |= 0x02; // kludge for 20pacgal
 		LOG(("Z180 '%s' STAT0  rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_STAT1:
-		data = IO_STAT1 & Z180_STAT1_RMASK;
+		data = m_data->read_byte(5);
+//		data = IO_STAT1 & Z180_STAT1_RMASK;
 		LOG(("Z180 '%s' STAT1  rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_TDR0:
-		data = m_data->read_byte(0); //IO_TDR0 & Z180_TDR0_RMASK;
+		data = m_data->read_byte(6); //IO_TDR0 & Z180_TDR0_RMASK;
 		
 		LOG(("Z180 '%s' TDR0   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_TDR1:
-		data = m_data->read_byte(1); //IO_TDR1 & Z180_TDR1_RMASK;
+		data = m_data->read_byte(7); //IO_TDR1 & Z180_TDR1_RMASK;
 		LOG(("Z180 '%s' TDR1   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_RDR0:
-		data = m_data->read_byte(2);
+		data = m_data->read_byte(8);
 		//data = IO_RDR0 & Z180_RDR0_RMASK;
 		LOG(("Z180 '%s' RDR0   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
 
 	case Z180_RDR1:
-		data = m_data->read_byte(3);
+		data = m_data->read_byte(9);
 		//data = IO_RDR1 & Z180_RDR1_RMASK;
 		LOG(("Z180 '%s' RDR1   rd $%02x ($%02x)\n", tag(), data, m_io[port & 0x3f]));
 		break;
@@ -1250,56 +1256,68 @@ void z180_device::z180_writecontrol(offs_t port, UINT8 data)
 	{
 	case Z180_CNTLA0:
 		LOG(("Z180 '%s' CNTLA0 wr $%02x ($%02x)\n", tag(), data,  data & Z180_CNTLA0_WMASK));
+		m_data->write_byte(0,data);
+
 		IO_CNTLA0 = (IO_CNTLA0 & ~Z180_CNTLA0_WMASK) | (data & Z180_CNTLA0_WMASK);
 		break;
 
 	case Z180_CNTLA1:
 		LOG(("Z180 '%s' CNTLA1 wr $%02x ($%02x)\n", tag(), data,  data & Z180_CNTLA1_WMASK));
+		m_data->write_byte(1,data);
+
 		IO_CNTLA1 = (IO_CNTLA1 & ~Z180_CNTLA1_WMASK) | (data & Z180_CNTLA1_WMASK);
 		break;
 
 	case Z180_CNTLB0:
 		LOG(("Z180 '%s' CNTLB0 wr $%02x ($%02x)\n", tag(), data,  data & Z180_CNTLB0_WMASK));
+		m_data->write_byte(2,data);
+
 		IO_CNTLB0 = (IO_CNTLB0 & ~Z180_CNTLB0_WMASK) | (data & Z180_CNTLB0_WMASK);
 		break;
 
 	case Z180_CNTLB1:
 		LOG(("Z180 '%s' CNTLB1 wr $%02x ($%02x)\n", tag(), data,  data & Z180_CNTLB1_WMASK));
+		m_data->write_byte(3,data);
+
 		IO_CNTLB1 = (IO_CNTLB1 & ~Z180_CNTLB1_WMASK) | (data & Z180_CNTLB1_WMASK);
 		break;
 
 	case Z180_STAT0:
 		LOG(("Z180 '%s' STAT0  wr $%02x ($%02x)\n", tag(), data,  data & Z180_STAT0_WMASK));
+		m_data->write_byte(4,data);
+
 		IO_STAT0 = (IO_STAT0 & ~Z180_STAT0_WMASK) | (data & Z180_STAT0_WMASK);
 		break;
 
 	case Z180_STAT1:
 		LOG(("Z180 '%s' STAT1  wr $%02x ($%02x)\n", tag(), data,  data & Z180_STAT1_WMASK));
+		m_data->write_byte(5,data);
+
 		IO_STAT1 = (IO_STAT1 & ~Z180_STAT1_WMASK) | (data & Z180_STAT1_WMASK);
 		break;
 
 	case Z180_TDR0:
 		LOG(("Z180 '%s' TDR0   wr $%02x ($%02x)\n", tag(), data,  data & Z180_TDR0_WMASK));
-		m_data->write_byte(0,data);
+		m_data->write_byte(6,data);
 		IO_TDR0 = (IO_TDR0 & ~Z180_TDR0_WMASK) | (data & Z180_TDR0_WMASK);
 		break;
 
 	case Z180_TDR1:
 		LOG(("Z180 '%s' TDR1   wr $%02x ($%02x)\n", tag(), data,  data & Z180_TDR1_WMASK));
-		m_data->write_byte(1,data);
+		m_data->write_byte(7,data);
 		IO_TDR1 = (IO_TDR1 & ~Z180_TDR1_WMASK) | (data & Z180_TDR1_WMASK);
 		break;
 
 	case Z180_RDR0:
 		LOG(("Z180 '%s' RDR0   wr $%02x ($%02x)\n", tag(), data,  data & Z180_RDR0_WMASK));
-		m_data->write_byte(2,data);
+		m_data->write_byte(8,data);
 
 		IO_RDR0 = (IO_RDR0 & ~Z180_RDR0_WMASK) | (data & Z180_RDR0_WMASK);
 		break;
 
 	case Z180_RDR1:
 		LOG(("Z180 '%s' RDR1   wr $%02x ($%02x)\n", tag(), data,  data & Z180_RDR1_WMASK));
-		m_data->write_byte(3,data);
+		m_data->write_byte(9,data);
 
 		IO_RDR1 = (IO_RDR1 & ~Z180_RDR1_WMASK) | (data & Z180_RDR1_WMASK);
 
