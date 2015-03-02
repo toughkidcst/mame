@@ -264,6 +264,10 @@ WRITE8_MEMBER(asuka_state::sound_bankswitch_2151_w)
 	membank("bank1")->set_entry(data & 0x03);
 }
 
+WRITE8_MEMBER(cadash_state::sound_bankswitch_2151_w_2)
+{
+	membank("bank2")->set_entry(data & 0x03);
+}
 
 
 WRITE_LINE_MEMBER(asuka_state::asuka_msm5205_vck)
@@ -641,6 +645,59 @@ static INPUT_PORTS_START( cadashj )
 	TAITO_COINAGE_JAPAN_OLD_LOC(SWA)
 INPUT_PORTS_END
 
+static INPUT_PORTS_START( cadashjl )
+	PORT_INCLUDE(cadashj)
+
+	/* 0x900000 -> 0x10317a ($317a,A5) */
+	PORT_START("DSWA_2")
+	TAITO_MACHINE_NO_COCKTAIL_LOC(SWC)
+	TAITO_COINAGE_JAPAN_OLD_LOC(SWC)
+
+	/* 0x900002 -> 0x10317c ($317c,A5) */
+	PORT_START("DSWB_2")
+	TAITO_DIFFICULTY_LOC(SWD)
+	PORT_DIPNAME( 0x0c, 0x0c, "Starting Time (2)" )         PORT_DIPLOCATION("SWD:3,4")
+	PORT_DIPSETTING(    0x00, "5:00" )
+	PORT_DIPSETTING(    0x04, "6:00" )
+	PORT_DIPSETTING(    0x0c, "7:00" )
+	PORT_DIPSETTING(    0x08, "8:00" )
+	/* Round cleared   Added time   */
+	/*       1            8:00  */
+	/*       2           10:00  */
+	/*       3            8:00  */
+	/*       4            7:00  */
+	/*       5            9:00  */
+	PORT_DIPNAME( 0x30, 0x30, "Added Time (after round clear) (2)" ) PORT_DIPLOCATION("SWD:5,6")
+	PORT_DIPSETTING(    0x00, "Default - 2:00" )
+	PORT_DIPSETTING(    0x10, "Default - 1:00" )
+	PORT_DIPSETTING(    0x30, "Default" )
+	PORT_DIPSETTING(    0x20, "Default + 1:00" )
+	PORT_DIPNAME( 0xc0, 0xc0, "Communication Mode (2)" )    PORT_DIPLOCATION("SWD:7,8")
+	PORT_DIPSETTING(    0xc0, "Stand alone" )
+	PORT_DIPSETTING(    0x80, "Master" )
+	PORT_DIPSETTING(    0x00, "Slave" )
+//  PORT_DIPSETTING(    0x40, "Stand alone" )
+
+	PORT_START("IN0_2")
+	CADASH_PLAYERS_INPUT( 3 )
+
+	PORT_START("IN1_2")
+	CADASH_PLAYERS_INPUT( 4 )
+
+	PORT_START("IN2_2")
+	PORT_BIT( 0x01, IP_ACTIVE_LOW,  IPT_COIN3 )
+	PORT_BIT( 0x02, IP_ACTIVE_LOW,  IPT_COIN4 )
+	PORT_BIT( 0x04, IP_ACTIVE_LOW,  IPT_START4 )
+	PORT_BIT( 0x08, IP_ACTIVE_LOW,  IPT_START3 )
+	PORT_BIT( 0x10, IP_ACTIVE_LOW,  IPT_SERVICE2 )
+	PORT_BIT( 0x20, IP_ACTIVE_LOW,  IPT_UNUSED ) // IPT_TILT slave
+	PORT_BIT( 0x40, IP_ACTIVE_LOW,  IPT_UNKNOWN )
+	PORT_BIT( 0x80, IP_ACTIVE_LOW,  IPT_UNKNOWN )
+
+INPUT_PORTS_END
+
+
+
 static INPUT_PORTS_START( cadashu )
 	PORT_INCLUDE(cadash)
 
@@ -812,12 +869,56 @@ void asuka_state::machine_reset()
 	memset(m_cval, 0, 26);
 }
 
+void cadash_state::machine_start()
+{
+	/* configure the banks */
+	membank("bank1")->configure_entry(0, memregion("audiocpu")->base());
+	membank("bank1")->configure_entries(1, 3, memregion("audiocpu")->base() + 0x10000, 0x04000);
+	membank("bank2")->configure_entry(0, memregion("audiocpu")->base());
+	membank("bank2")->configure_entries(1, 3, memregion("audiocpu")->base() + 0x10000, 0x04000);
+
+	
+	save_item(NAME(m_adpcm_pos));
+	save_item(NAME(m_adpcm_data));
+
+	save_item(NAME(m_current_round));
+	save_item(NAME(m_current_bank));
+	save_item(NAME(m_video_ctrl));
+	save_item(NAME(m_video_mask));
+	save_item(NAME(m_cc_port));
+	save_item(NAME(m_restart_status));
+	save_item(NAME(m_cval));
+}
+
+void cadash_state::machine_reset()
+{
+	m_adpcm_pos = 0;
+	m_adpcm_data = -1;
+	m_current_round = 0;
+	m_current_bank = 0;
+	m_video_ctrl = 0;
+	m_video_mask = 0;
+	m_cc_port = 0;
+	m_restart_status = 0;
+
+	memset(m_cval, 0, 26);
+}
+
 void asuka_state::screen_eof_asuka(screen_device &screen, bool state)
 {
 	// rising edge
 	if (state)
 	{
 		m_pc090oj->eof_callback();
+	}
+}
+
+void cadash_state::screen_eof_cadash(screen_device &screen, bool state)
+{
+	// rising edge
+	if (state)
+	{
+		m_pc090oj_2->eof_callback();
 	}
 }
 
@@ -1786,21 +1887,31 @@ GAME( 1994, eto,       0,        eto,      eto, driver_device,      0, ROT0,   "
  *
  *******************************/
 
- static ADDRESS_MAP_START( cadash_map_2, AS_PROGRAM, 16, asuka_state )
+ static ADDRESS_MAP_START( cadash_map_2, AS_PROGRAM, 16, cadash_state )
 	AM_RANGE(0x000000, 0x07ffff) AM_ROM AM_REGION("maincpu",0)
-//	AM_RANGE(0x080000, 0x080003) AM_WRITE(asuka_spritectrl_w)
-//	AM_RANGE(0x0c0000, 0x0c0001) AM_READNOP AM_DEVWRITE8("tc0140syt", tc0140syt_device, master_port_w, 0x00ff)
-//	AM_RANGE(0x0c0002, 0x0c0003) AM_DEVREADWRITE8("tc0140syt", tc0140syt_device, master_comm_r, master_comm_w, 0x00ff)
+	AM_RANGE(0x080000, 0x080003) AM_WRITE(asuka_spritectrl_w_2)
+	AM_RANGE(0x0c0000, 0x0c0001) AM_READNOP AM_DEVWRITE8("tc0140syt_2", tc0140syt_device, master_port_w, 0x00ff)
+	AM_RANGE(0x0c0002, 0x0c0003) AM_DEVREADWRITE8("tc0140syt_2", tc0140syt_device, master_comm_r, master_comm_w, 0x00ff)
 	AM_RANGE(0x100000, 0x107fff) AM_RAM
 //	AM_RANGE(0x800000, 0x800fff) AM_READWRITE(cadash_share_r,cadash_share_w)    /* network ram */
-//	AM_RANGE(0x900000, 0x90000f) AM_DEVREADWRITE8("tc0220ioc", tc0220ioc_device, read, write, 0x00ff)
-//	AM_RANGE(0xa00000, 0xa0000f) AM_DEVREADWRITE("tc0110pcr", tc0110pcr_device, word_r, step1_4bpg_word_w)
-//	AM_RANGE(0xb00000, 0xb03fff) AM_DEVREADWRITE("pc090oj", pc090oj_device, word_r, word_w)  /* sprite ram */
-//	AM_RANGE(0xc00000, 0xc0ffff) AM_DEVREADWRITE("tc0100scn", tc0100scn_device, word_r, word_w)    /* tilemaps */
-//	AM_RANGE(0xc20000, 0xc2000f) AM_DEVREADWRITE("tc0100scn", tc0100scn_device, ctrl_word_r, ctrl_word_w)
+	AM_RANGE(0x900000, 0x90000f) AM_DEVREADWRITE8("tc0220ioc_2", tc0220ioc_device, read, write, 0x00ff)
+	AM_RANGE(0xa00000, 0xa0000f) AM_DEVREADWRITE("tc0110pcr_2", tc0110pcr_device, word_r, step1_4bpg_word_w)
+	AM_RANGE(0xb00000, 0xb03fff) AM_DEVREADWRITE("pc090oj_2", pc090oj_device, word_r, word_w)  /* sprite ram */
+	AM_RANGE(0xc00000, 0xc0ffff) AM_DEVREADWRITE("tc0100scn_2", tc0100scn_device, word_r, word_w)    /* tilemaps */
+	AM_RANGE(0xc20000, 0xc2000f) AM_DEVREADWRITE("tc0100scn_2", tc0100scn_device, ctrl_word_r, ctrl_word_w)
+ADDRESS_MAP_END
+
+static ADDRESS_MAP_START( cadash_z80_map_2, AS_PROGRAM, 8, asuka_state )
+	AM_RANGE(0x0000, 0x3fff) AM_ROM AM_REGION("audiocpu",0)
+	AM_RANGE(0x4000, 0x7fff) AM_ROMBANK("bank2")
+	AM_RANGE(0x8000, 0x8fff) AM_RAM
+	AM_RANGE(0x9000, 0x9001) AM_DEVREADWRITE("ymsnd_2", ym2151_device, read, write)
+	AM_RANGE(0xa000, 0xa000) AM_DEVWRITE("tc0140syt_2", tc0140syt_device, slave_port_w)
+	AM_RANGE(0xa001, 0xa001) AM_DEVREADWRITE("tc0140syt_2", tc0140syt_device, slave_comm_r, slave_comm_w)
 ADDRESS_MAP_END
  
-static MACHINE_CONFIG_START( cadashjl, asuka_state )
+
+static MACHINE_CONFIG_START( cadashjl, cadash_state )
 
 	/* basic machine hardware */
 	MCFG_CPU_ADD("maincpu", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
@@ -1816,11 +1927,15 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 
 	MCFG_CPU_ADD("maincpu_2", M68000, XTAL_32MHz/2)   /* 68000p12 running at 16Mhz, verified on pcb  */
 	MCFG_CPU_PROGRAM_MAP(cadash_map_2)
-	//MCFG_CPU_VBLANK_INT_DRIVER("screen_2", asuka_state,  irq4_line_hold)
+	MCFG_CPU_VBLANK_INT_DRIVER("screen_2", asuka_state,  irq4_line_hold)
+
+	MCFG_CPU_ADD("audiocpu_2", Z80, XTAL_8MHz/2)  /* verified on pcb */
+	MCFG_CPU_PROGRAM_MAP(cadash_z80_map_2)
 
 
 	MCFG_QUANTUM_TIME(attotime::from_hz(600))
 
+	// done
 	MCFG_DEVICE_ADD("tc0220ioc", TC0220IOC, 0)
 	MCFG_TC0220IOC_READ_0_CB(IOPORT("DSWA"))
 	MCFG_TC0220IOC_READ_1_CB(IOPORT("DSWB"))
@@ -1828,7 +1943,16 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 	MCFG_TC0220IOC_READ_3_CB(IOPORT("IN1"))
 	MCFG_TC0220IOC_READ_7_CB(IOPORT("IN2"))
 
+	MCFG_DEVICE_ADD("tc0220ioc_2", TC0220IOC, 0)
+	MCFG_TC0220IOC_READ_0_CB(IOPORT("DSWA_2"))
+	MCFG_TC0220IOC_READ_1_CB(IOPORT("DSWB_2"))
+	MCFG_TC0220IOC_READ_2_CB(IOPORT("IN0_2"))
+	MCFG_TC0220IOC_READ_3_CB(IOPORT("IN1_2"))
+	MCFG_TC0220IOC_READ_7_CB(IOPORT("IN2_2"))
+
+	
 	/* video hardware */
+	// done
 	MCFG_SCREEN_ADD("screen", RASTER)
 	MCFG_SCREEN_REFRESH_RATE(60)
 	MCFG_SCREEN_VBLANK_TIME(ATTOSECONDS_IN_USEC(0))
@@ -1838,25 +1962,33 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 	MCFG_SCREEN_VBLANK_DRIVER(asuka_state, screen_eof_asuka)
 	MCFG_SCREEN_PALETTE("palette")
 
-	/*
 	MCFG_SCREEN_ADD("screen_2", RASTER)
 	MCFG_SCREEN_REFRESH_RATE(60)
 	MCFG_SCREEN_VBLANK_TIME(ATTOSECONDS_IN_USEC(0))
 	MCFG_SCREEN_SIZE(40*8, 32*8)
 	MCFG_SCREEN_VISIBLE_AREA(0*8, 40*8-1, 2*8, 32*8-1)
-	MCFG_SCREEN_UPDATE_DRIVER(asuka_state, screen_update_bonzeadv)
-	MCFG_SCREEN_VBLANK_DRIVER(asuka_state, screen_eof_asuka)
-	MCFG_SCREEN_PALETTE("palette")
-	*/
+	MCFG_SCREEN_UPDATE_DRIVER(cadash_state, screen_update_cadash)
+	MCFG_SCREEN_VBLANK_DRIVER(cadash_state, screen_eof_cadash)
+	MCFG_SCREEN_PALETTE("palette_2")
+
 	
 	MCFG_GFXDECODE_ADD("gfxdecode", "palette", asuka)
 	MCFG_PALETTE_ADD("palette", 4096)
-
+	MCFG_GFXDECODE_ADD("gfxdecode_2", "palette_2", asuka)
+	MCFG_PALETTE_ADD("palette_2", 4096)
+	
+	// done	
 	MCFG_DEVICE_ADD("pc090oj", PC090OJ, 0)
 	MCFG_PC090OJ_OFFSETS(0, 8)
 	MCFG_PC090OJ_USEBUFFER(1)
 	MCFG_PC090OJ_GFXDECODE("gfxdecode")
 	MCFG_PC090OJ_PALETTE("palette")
+
+	MCFG_DEVICE_ADD("pc090oj_2", PC090OJ, 0)
+	MCFG_PC090OJ_OFFSETS(0, 8)
+	MCFG_PC090OJ_USEBUFFER(1)
+	MCFG_PC090OJ_GFXDECODE("gfxdecode_2")
+	MCFG_PC090OJ_PALETTE("palette_2")
 
 	MCFG_DEVICE_ADD("tc0100scn", TC0100SCN, 0)
 	MCFG_TC0100SCN_GFX_REGION(1)
@@ -1864,22 +1996,48 @@ static MACHINE_CONFIG_START( cadashjl, asuka_state )
 	MCFG_TC0100SCN_OFFSETS(1, 0)
 	MCFG_TC0100SCN_GFXDECODE("gfxdecode")
 	MCFG_TC0100SCN_PALETTE("palette")
+	
+	MCFG_DEVICE_ADD("tc0100scn_2", TC0100SCN, 0)
+	MCFG_TC0100SCN_GFX_REGION(1)
+	MCFG_TC0100SCN_TX_REGION(2)
+	MCFG_TC0100SCN_OFFSETS(1, 0)
+	MCFG_TC0100SCN_GFXDECODE("gfxdecode_2")
+	MCFG_TC0100SCN_PALETTE("palette_2")
 
 	MCFG_TC0110PCR_ADD("tc0110pcr")
 	MCFG_TC0110PCR_PALETTE("palette")
 
+	MCFG_TC0110PCR_ADD("tc0110pcr_2")
+	MCFG_TC0110PCR_PALETTE("palette_2")
+
+	
 	/* sound hardware */
-	MCFG_SPEAKER_STANDARD_MONO("mono")
+	// done
+	MCFG_SPEAKER_STANDARD_STEREO("master","slave")
 
 	MCFG_YM2151_ADD("ymsnd", XTAL_8MHz/2)   /* verified on pcb */
 	MCFG_YM2151_IRQ_HANDLER(INPUTLINE("audiocpu", 0))
 	MCFG_YM2151_PORT_WRITE_HANDLER(WRITE8(asuka_state,sound_bankswitch_2151_w))
-	MCFG_SOUND_ROUTE(0, "mono", 0.50)
-	MCFG_SOUND_ROUTE(1, "mono", 0.50)
+	MCFG_SOUND_ROUTE(0, "master", 0.50)
+	MCFG_SOUND_ROUTE(1, "master", 0.50)
 
+	MCFG_YM2151_ADD("ymsnd_2", XTAL_8MHz/2)   /* verified on pcb */
+	MCFG_YM2151_IRQ_HANDLER(INPUTLINE("audiocpu_2", 0))
+	MCFG_YM2151_PORT_WRITE_HANDLER(WRITE8(cadash_state,sound_bankswitch_2151_w_2))
+	MCFG_SOUND_ROUTE(0, "slave", 0.50)
+	MCFG_SOUND_ROUTE(1, "slave", 0.50)
+
+	
+	// done
+	
 	MCFG_DEVICE_ADD("tc0140syt", TC0140SYT, 0)
 	MCFG_TC0140SYT_MASTER_CPU("maincpu")
 	MCFG_TC0140SYT_SLAVE_CPU("audiocpu")
+	
+	MCFG_DEVICE_ADD("tc0140syt_2", TC0140SYT, 0)
+	MCFG_TC0140SYT_MASTER_CPU("maincpu_2")
+	MCFG_TC0140SYT_SLAVE_CPU("audiocpu_2")
+
 MACHINE_CONFIG_END
 
 
@@ -1910,4 +2068,4 @@ ROM_START( cadashjl )
 	ROM_LOAD( "pal20l8b-c21-12.ic47",   0x0600, 0x0144, CRC(bbc2cc97) SHA1(d4a68f28e0d3f5a3b39ecc25640bc9197ad0260b) )
 ROM_END
 
-GAME( 1989, cadashjl,   cadash,   cadashjl,   cadashj, driver_device,  0, ROT0,   "Taito Corporation",         "Cadash (Japan, version 2, with Link)", GAME_SUPPORTS_SAVE )
+GAME( 1989, cadashjl,   cadash,   cadashjl,   cadashjl, driver_device,  0, ROT0,   "Taito Corporation",         "Cadash (Japan, version 2, with Link)", GAME_SUPPORTS_SAVE )
