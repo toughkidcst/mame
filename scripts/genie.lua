@@ -699,7 +699,8 @@ if (_OPTIONS["targetos"]=="solaris") then
 	}
 else
 	buildoptions_c {
-		"-std=gnu89",
+		"-pedantic",
+		"-std=gnu99",
 
 	}
 end	
@@ -971,7 +972,7 @@ end
 			end
 			if (version >= 50000) then
 				buildoptions {
-					"-D__USE_MINGW_ANSI_STDIO=1",							
+--					"-D__USE_MINGW_ANSI_STDIO=1",							
 				}
 			end
 			
