@@ -6,6 +6,7 @@
 #define __DISCRETE_H__
 
 #include "machine/rescap.h"
+#pragma GCC diagnostic error "-pedantic"
 
 /***********************************************************************
  *
