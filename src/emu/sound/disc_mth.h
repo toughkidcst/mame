@@ -1,5 +1,6 @@
 // license:BSD-3-Clause
 // copyright-holders:K.Wilkins
+#pragma GCC diagnostic error "-pedantic"
 #pragma once
 
 #ifndef __DISC_MTH_H__
@@ -237,4 +238,4 @@ DISCRETE_CLASS_STEP(dst_xtime_or, 1, /* no context */ );
 DISCRETE_CLASS_STEP(dst_xtime_xor, 1, /* no context */ );
 
 
-#endif /* __DISC_WAV_H__ */
+#endif /* __DISC_MTH_H__ */
