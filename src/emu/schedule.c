@@ -293,7 +293,7 @@ inline void emu_timer::schedule_next_period()
 
 void emu_timer::dump() const
 {
-	logerror("%p: en=%d temp=%d exp=%15s start=%15s per=%15s param=%d ptr=%p", this, m_enabled, m_temporary, m_expire.as_string(PRECISION), m_start.as_string(PRECISION), m_period.as_string(PRECISION), m_param, m_ptr);
+	logerror("%p: en=%d temp=%d exp=%15s start=%15s per=%15s param=%d ptr=%p", (void *)this, m_enabled, m_temporary, m_expire.as_string(PRECISION), m_start.as_string(PRECISION), m_period.as_string(PRECISION), m_param, (void *)m_ptr);
 	if (m_device == NULL)
 		logerror(" cb=%s\n", m_callback.name());
 	else
@@ -458,7 +458,7 @@ void device_scheduler::timeslice()
 				{
 					// compute how many cycles we want to execute
 					int ran = exec->m_cycles_running = divu_64x32((UINT64)delta >> exec->m_divshift, exec->m_divisor);
-					LOG(("  cpu '%s': %" I64FMT"d (%d cycles)\n", exec->device().tag(), delta, exec->m_cycles_running));
+//					LOG(("  cpu '%s': %" I64FMT "d (%d cycles)\n", exec->device().tag(), delta, exec->m_cycles_running));
 
 					// if we're not suspended, actually execute
 					if (exec->m_suspend == 0)

@@ -37,6 +37,7 @@
 
 #include "emu.h"
 #include "wavwrite.h"
+#pragma GCC diagnostic error "-pedantic"
 #include "discrete.h"
 
 /* for_each collides with c++ standard libraries - include it here */
@@ -327,7 +328,7 @@ void discrete_task::check(discrete_task *dest_task)
 							i = m_buffers.count();
 							pbuf = m_buffers.add(buf);
 						}
-						m_device.discrete_log("dso_task_start - buffering %d(%d) in task %p group %d referenced by %d group %d", NODE_INDEX(inputnode_num), NODE_CHILD_NODE_NUM(inputnode_num), this, task_group, dest_node->index(), dest_task->task_group);
+						m_device.discrete_log("dso_task_start - buffering %d(%d) in task %p group %d referenced by %d group %d", NODE_INDEX(inputnode_num), NODE_CHILD_NODE_NUM(inputnode_num), (void *) this, task_group, dest_node->index(), dest_task->task_group);
 
 						/* register into source list */
 						//source = auto_alloc(device->machine(), discrete_source_node);
@@ -641,9 +642,9 @@ void discrete_device::display_profiling(void)
 	total = list_run_time(m_node_list);
 	count = m_node_list.count();
 	/* print statistics */
-	printf("Total Samples  : %16" I64FMT "d\n", m_total_samples);
+//	printf("Total Samples  : %16" I64FMT "d\n", m_total_samples);
 	tresh = total / count;
-	printf("Threshold (mean): %16" I64FMT "d\n", tresh / m_total_samples );
+//	printf("Threshold (mean): %16" I64FMT "d\n", tresh / m_total_samples );
 	for_each(discrete_base_node **, node, &m_node_list)
 	{
 		discrete_step_interface *step;
