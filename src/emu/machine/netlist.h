@@ -68,13 +68,13 @@ public:
 	{
 	}
 
-	bool parse(netlist::setup_t *setup, const pstring name);
+	bool parse(netlist::setup_t &setup, const pstring &name);
 private:
 	pstring m_name;
 };
 
 #define MEMREGION_SOURCE(_name) \
-		setup.register_source(palloc(netlist_source_memregion_t, _name));
+		setup.register_source(palloc(netlist_source_memregion_t(_name)));
 
 #define NETDEV_ANALOG_CALLBACK_MEMBER(_name) \
 	void _name(const double data, const attotime &time)
@@ -642,7 +642,7 @@ public:
 		register_output("Q", m_Q);
 		register_input("FB", m_feedback);
 
-		connect(m_feedback, m_Q);
+		connect_late(m_feedback, m_Q);
 		m_inc = netlist::netlist_time::from_nsec(1);
 
 

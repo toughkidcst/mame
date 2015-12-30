@@ -128,6 +128,8 @@ CPUS["ARCOMPACT"] = true
 CPUS["HMCS40"] = true
 --CPUS["E0C6200"] = true
 --CPUS["MELPS4"] = true
+--CPUS["HPHYBRID"] = true
+--CPUS["SM510"] = true
 
 --------------------------------------------------
 -- specify available sound cores
@@ -773,6 +775,7 @@ function createMAMEProjects(_target, _subtarget, _name)
 		MAME_DIR .. "src/mame",
 		MAME_DIR .. "src/lib",
 		MAME_DIR .. "src/lib/util",
+    MAME_DIR .. "src/emu/netlist",
 		MAME_DIR .. "3rdparty",
 		GEN_DIR  .. "mame/layout",
 	}
@@ -2083,6 +2086,7 @@ files {
 	MAME_DIR .. "src/mame/machine/namcos1.c",
 	MAME_DIR .. "src/mame/video/namcos1.c",
 	MAME_DIR .. "src/mame/drivers/namcos10.c",
+	MAME_DIR .. "src/mame/machine/ns10crypt.c",
 	MAME_DIR .. "src/mame/drivers/namcos11.c",
 	MAME_DIR .. "src/mame/machine/ns11prot.c",
 	MAME_DIR .. "src/mame/drivers/namcos12.c",
@@ -2211,6 +2215,7 @@ files {
 	MAME_DIR .. "src/mame/drivers/mario.c",
 	MAME_DIR .. "src/mame/audio/mario.c",
 	MAME_DIR .. "src/mame/video/mario.c",
+	MAME_DIR .. "src/mame/drivers/mmagic.c",
 	MAME_DIR .. "src/mame/drivers/multigam.c",
 	MAME_DIR .. "src/mame/drivers/n8080.c",
 	MAME_DIR .. "src/mame/audio/n8080.c",
@@ -2582,7 +2587,6 @@ files {
 	MAME_DIR .. "src/mame/machine/n64.c",
 	MAME_DIR .. "src/mame/video/n64.c",
 	MAME_DIR .. "src/mame/video/rdpblend.c",
-	MAME_DIR .. "src/mame/video/rdpspn16.c",
 	MAME_DIR .. "src/mame/video/rdptpipe.c",
 	MAME_DIR .. "src/mame/drivers/hanaawas.c",
 	MAME_DIR .. "src/mame/video/hanaawas.c",
@@ -2605,6 +2609,7 @@ files {
 	MAME_DIR .. "src/mame/machine/st0016.c",
 	MAME_DIR .. "src/mame/drivers/simple_st0016.c",
 	MAME_DIR .. "src/mame/video/seta001.c",
+	MAME_DIR .. "src/mame/drivers/thedealr.c",
 }
 
 createMAMEProjects(_target, _subtarget, "sigma")

@@ -129,6 +129,7 @@ CPUS["HMCS40"] = true
 CPUS["E0C6200"] = true
 CPUS["MELPS4"] = true
 CPUS["HPHYBRID"] = true
+CPUS["SM510"] = true
 
 --------------------------------------------------
 -- specify available sound cores; some of these are
@@ -155,7 +156,7 @@ SOUNDS["YM3526"] = true
 SOUNDS["Y8950"] = true
 SOUNDS["YMF262"] = true
 --SOUNDS["YMF271"] = true
---SOUNDS["YMF278B"] = true
+SOUNDS["YMF278B"] = true
 --SOUNDS["YMZ280B"] = true
 SOUNDS["SN76477"] = true
 SOUNDS["SN76496"] = true
@@ -484,6 +485,7 @@ MACHINES["PCCARD"] = true
 MACHINES["PCF8593"] = true
 MACHINES["PCKEYBRD"] = true
 MACHINES["PIC8259"] = true
+MACHINES["PIT68230"] = true
 MACHINES["PIT8253"] = true
 MACHINES["PLA"] = true
 --MACHINES["PROFILE"] = true
@@ -721,6 +723,7 @@ function linkProjects_mame_mess(_target, _subtarget)
 		"exidy",
 		"fairch",
 		"fidelity",
+		"force",
 		"fujitsu",
 		"funtech",
 		"galaxy",
@@ -754,6 +757,7 @@ function linkProjects_mame_mess(_target, _subtarget)
 		"memotech",
 		"mgu",
 		"microkey",
+		"microsoft",
 		"mit",
 		"mits",
 		"mitsubishi",
@@ -773,6 +777,7 @@ function linkProjects_mame_mess(_target, _subtarget)
 		"novag",
 		"ns",
 		"olivetti",
+		"olympia",
 		"omnibyte",
 		"orion",
 		"osborne",
@@ -835,6 +840,7 @@ function linkProjects_mame_mess(_target, _subtarget)
 		"toshiba",
 		"trainer",
 		"trs",
+		"ultimachine",
 		"ultratec",
 		"unisys",
 		"veb",
@@ -877,6 +883,7 @@ function createMESSProjects(_target, _subtarget, _name)
 		MAME_DIR .. "src/mame",
 		MAME_DIR .. "src/lib",
 		MAME_DIR .. "src/lib/util",
+    MAME_DIR .. "src/emu/netlist",
 		MAME_DIR .. "3rdparty",
 		GEN_DIR  .. "mess/layout",
 		GEN_DIR  .. "mame/layout",
@@ -939,7 +946,6 @@ files {
 	MAME_DIR .. "src/mame/video/n64.c",         
 	MAME_DIR .. "src/mame/video/rdpblend.c",    
 	MAME_DIR .. "src/mame/video/rdptpipe.c",    
-	MAME_DIR .. "src/mame/video/rdpspn16.c",    
 	MAME_DIR .. "src/mame/machine/megadriv.c",  
 	MAME_DIR .. "src/mame/drivers/naomi.c",     
 	MAME_DIR .. "src/mame/machine/awboard.c",   
@@ -1506,6 +1512,11 @@ files {
 	MAME_DIR .. "src/mess/drivers/fidelz80.c",  
 }
 
+createMESSProjects(_target, _subtarget, "force")
+files {          
+	MAME_DIR .. "src/mess/drivers/force68k.c",  
+}
+
 createMESSProjects(_target, _subtarget, "fujitsu")
 files {           
 	MAME_DIR .. "src/mess/drivers/fmtowns.c",
@@ -1627,6 +1638,7 @@ files {
 	MAME_DIR .. "src/mess/drivers/isbc.c",
 	MAME_DIR .. "src/mess/machine/isbc_215g.c", 
 	MAME_DIR .. "src/mess/drivers/rex6000.c",   
+	MAME_DIR .. "src/mess/drivers/sdk80.c",     
 	MAME_DIR .. "src/mess/drivers/sdk85.c",     
 	MAME_DIR .. "src/mess/drivers/sdk86.c",   
 	MAME_DIR .. "src/mess/drivers/imds2.c",  
@@ -1748,6 +1760,11 @@ files {
 	MAME_DIR .. "src/mess/drivers/primo.c",
 	MAME_DIR .. "src/mess/machine/primo.c",
 	MAME_DIR .. "src/mess/video/primo.c", 
+}
+
+createMESSProjects(_target, _subtarget, "microsoft")
+files {               
+	MAME_DIR .. "src/mess/drivers/xbox.c",    
 }
 
 createMESSProjects(_target, _subtarget, "mit")
@@ -1891,9 +1908,15 @@ createMESSProjects(_target, _subtarget, "olivetti")
 files {          
 	MAME_DIR .. "src/mess/drivers/m20.c",       
 	MAME_DIR .. "src/mess/machine/m20_kbd.c",
+	MAME_DIR .. "src/mess/machine/m20_8086.c",
 	MAME_DIR .. "src/mess/drivers/m24.c",
 	MAME_DIR .. "src/mess/machine/m24_kbd.c",
 	MAME_DIR .. "src/mess/machine/m24_z8000.c"
+}
+
+createMESSProjects(_target, _subtarget, "olympia")
+files {          
+	MAME_DIR .. "src/mess/drivers/peoplepc.c"
 }
 
 createMESSProjects(_target, _subtarget, "ns")
@@ -2091,6 +2114,7 @@ files {
 	MAME_DIR .. "src/mess/drivers/megadriv.c",  
 	MAME_DIR .. "src/mess/drivers/saturn.c",    
 	MAME_DIR .. "src/mess/drivers/segapico.c",  
+	MAME_DIR .. "src/mess/drivers/segapm.c",  
 	MAME_DIR .. "src/mess/drivers/sg1000.c",    
 	MAME_DIR .. "src/mess/drivers/sms.c",
 	MAME_DIR .. "src/mess/machine/sms.c", 
@@ -2112,6 +2136,7 @@ files {
 
 createMESSProjects(_target, _subtarget, "sharp")
 files {             
+	MAME_DIR .. "src/mess/drivers/hh_sm510.c",
 	MAME_DIR .. "src/mess/video/mz700.c",       
 	MAME_DIR .. "src/mess/drivers/mz700.c",     
 	MAME_DIR .. "src/mess/drivers/pc1500.c",    
@@ -2309,7 +2334,6 @@ files {
 	MAME_DIR .. "src/mess/video/ondra.c", 
 	MAME_DIR .. "src/mess/drivers/pmd85.c",
 	MAME_DIR .. "src/mess/machine/pmd85.c",
-	MAME_DIR .. "src/mess/video/pmd85.c", 
 	MAME_DIR .. "src/mess/drivers/pmi80.c",     
 	MAME_DIR .. "src/mess/drivers/sapi1.c",     
 }
@@ -2434,6 +2458,11 @@ files {
 	MAME_DIR .. "src/mess/machine/trs80m2kb.c", 
 	MAME_DIR .. "src/mess/drivers/tandy2k.c",
 	MAME_DIR .. "src/mess/machine/tandy2kb.c", 
+}
+
+createMESSProjects(_target, _subtarget, "ultimachine")
+files {
+	MAME_DIR .. "src/mess/drivers/rambo.c",
 }
 
 createMESSProjects(_target, _subtarget, "ultratec")
@@ -2571,6 +2600,8 @@ files {
 	MAME_DIR .. "src/mess/drivers/amust.c",     
 	MAME_DIR .. "src/mess/drivers/applix.c",    
 	MAME_DIR .. "src/mess/drivers/attache.c",   
+	MAME_DIR .. "src/mess/drivers/aussiebyte.c",
+	MAME_DIR .. "src/mess/video/aussiebyte.c",
 	MAME_DIR .. "src/mess/drivers/ax20.c",      
 	MAME_DIR .. "src/mess/drivers/beehive.c",   
 	MAME_DIR .. "src/mess/drivers/binbug.c",    
