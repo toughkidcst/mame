@@ -29,15 +29,14 @@ public:
 	/* memory pointers (used by pipedrm) */
 	optional_shared_ptr<UINT8> m_videoram;
 	optional_shared_ptr<UINT8> m_spriteram;
-//  UINT8 *  m_paletteram;    // currently this uses generic palette handling
 
 	optional_device<vsystem_spr2_device> m_spr_old; // only used by pipe dream, split this state up and clean things...
 
 	/* video-related */
 	tilemap_t  *m_bg_tilemap;
 	tilemap_t  *m_fg_tilemap;
-	UINT8    *m_local_videoram[2];
-	UINT8    *m_local_paletteram;
+	std::unique_ptr<UINT8[]>   m_local_videoram[2];
+	std::unique_ptr<UINT8[]>  m_local_paletteram;
 	UINT8    m_selected_videoram;
 	UINT8    m_selected_paletteram;
 	UINT32   m_scrollx[2];

@@ -25,8 +25,7 @@ public:
 		m_dsp56k_p_mirror(*this, "dsp56k_p_mirror"),
 		m_dsp56k_p_8000(*this, "dsp56k_p_8000"),
 		m_gfxdecode(*this, "gfxdecode"),
-		m_palette(*this, "palette"),
-		m_generic_paletteram_32(*this, "paletteram")
+		m_palette(*this, "palette")
 	{ }
 
 	required_device<cpu_device> m_maincpu;
@@ -42,7 +41,6 @@ public:
 	required_shared_ptr<UINT16> m_dsp56k_p_8000;
 	required_device<gfxdecode_device> m_gfxdecode;
 	required_device<palette_device> m_palette;
-	required_shared_ptr<UINT32> m_generic_paletteram_32;
 
 	ioport_port *m_inputs[4];
 	UINT8 m_sys0;
@@ -76,7 +74,6 @@ public:
 	DECLARE_WRITE32_MEMBER(dsp_w_lines);
 	DECLARE_WRITE32_MEMBER(dsp_host_interface_w);
 	DECLARE_READ32_MEMBER(network_r);
-	DECLARE_WRITE32_MEMBER(plygonet_palette_w);
 	DECLARE_READ16_MEMBER(dsp56k_bootload_r);
 	DECLARE_READ16_MEMBER(dsp56k_ram_bank00_read);
 	DECLARE_WRITE16_MEMBER(dsp56k_ram_bank00_write);
@@ -98,9 +95,9 @@ public:
 	TILE_GET_INFO_MEMBER(roz_get_tile_info);
 	TILEMAP_MAPPER_MEMBER(plygonet_scan);
 	TILEMAP_MAPPER_MEMBER(plygonet_scan_cols);
-	virtual void machine_reset();
-	virtual void machine_start();
-	virtual void video_start();
+	virtual void machine_reset() override;
+	virtual void machine_start() override;
+	virtual void video_start() override;
 	UINT32 screen_update_polygonet(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(polygonet_interrupt);
 	DECLARE_WRITE_LINE_MEMBER(k054539_nmi_gen);

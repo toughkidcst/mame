@@ -36,7 +36,11 @@ public:
 	static void static_set_license(device_t &device, const char *license);
 	static void static_set_versions(device_t &device, const char *versions);
 
-	void maple_w(const UINT32 *data, UINT32 in_size);
+	void maple_w(const UINT32 *data, UINT32 in_size) override;
+
+protected:
+	// device-level overrides
+	virtual void device_start() override;
 
 private:
 	void fixed_status(UINT32 *dest);
@@ -45,6 +49,8 @@ private:
 
 	const char *port_tag[8];
 	const char *id, *license, *versions;
+
+	ioport_port *port[8];
 };
 
 extern const device_type DC_CONTROLLER;

@@ -5,6 +5,7 @@
     Bally Astrocade-based hardware
 
 ***************************************************************************/
+#include "machine/bankdev.h"
 #include "sound/astrocde.h"
 #include "sound/samples.h"
 #include "sound/votrax.h"
@@ -37,7 +38,24 @@ public:
 		m_astrocade_sound1(*this, "astrocade1"),
 		m_videoram(*this, "videoram"),
 		m_protected_ram(*this, "protected_ram"),
-		m_screen(*this, "screen") { }
+		m_screen(*this, "screen"),
+		m_bank4000(*this, "bank4000"),
+		m_bank8000(*this, "bank8000"),
+		m_p1handle(*this, "P1HANDLE"),
+		m_p2handle(*this, "P2HANDLE"),
+		m_p3handle(*this, "P3HANDLE"),
+		m_p4handle(*this, "P4HANDLE"),
+		m_keypad0(*this, "KEYPAD0"),
+		m_keypad1(*this, "KEYPAD1"),
+		m_keypad2(*this, "KEYPAD2"),
+		m_keypad3(*this, "KEYPAD3"),
+		m_p1_knob(*this, "P1_KNOB"),
+		m_p2_knob(*this, "P2_KNOB"),
+		m_p3_knob(*this, "P3_KNOB"),
+		m_p4_knob(*this, "P4_KNOB"),
+		m_trackball(*this, trackball_inputs),
+		m_joystick(*this, joystick_inputs)
+	{ }
 
 	required_device<cpu_device> m_maincpu;
 	optional_device<cpu_device> m_subcpu;
@@ -47,6 +65,24 @@ public:
 	optional_shared_ptr<UINT8> m_videoram;
 	optional_shared_ptr<UINT8> m_protected_ram;
 	required_device<screen_device> m_screen;
+	optional_device<address_map_bank_device> m_bank4000;
+	optional_memory_bank m_bank8000;
+	optional_ioport m_p1handle;
+	optional_ioport m_p2handle;
+	optional_ioport m_p3handle;
+	optional_ioport m_p4handle;
+	optional_ioport m_keypad0;
+	optional_ioport m_keypad1;
+	optional_ioport m_keypad2;
+	optional_ioport m_keypad3;
+	optional_ioport m_p1_knob;
+	optional_ioport m_p2_knob;
+	optional_ioport m_p3_knob;
+	optional_ioport m_p4_knob;
+	DECLARE_IOPORT_ARRAY(trackball_inputs);
+	optional_ioport_array<4> m_trackball;
+	DECLARE_IOPORT_ARRAY(joystick_inputs);
+	optional_ioport_array<2> m_joystick;
 
 	UINT8 m_video_config;
 	UINT8 m_sparkle[4];
@@ -58,8 +94,7 @@ public:
 	UINT8 m_port_2_last;
 	UINT8 m_ram_write_enable;
 	UINT8 m_input_select;
-	UINT8 m_profpac_bank;
-	UINT8 *m_sparklestar;
+	std::unique_ptr<UINT8[]> m_sparklestar;
 	UINT8 m_interrupt_enabl;
 	UINT8 m_interrupt_vector;
 	UINT8 m_interrupt_scanline;
@@ -85,7 +120,7 @@ public:
 	UINT8 m_pattern_skip;
 	UINT8 m_pattern_width;
 	UINT8 m_pattern_height;
-	UINT16 *m_profpac_videoram;
+	std::unique_ptr<UINT16[]> m_profpac_videoram;
 	UINT16 m_profpac_palette[16];
 	UINT8 m_profpac_colormap[4];
 	UINT8 m_profpac_intercept;
@@ -112,6 +147,7 @@ public:
 	DECLARE_READ8_MEMBER(profpac_io_1_r);
 	DECLARE_READ8_MEMBER(profpac_io_2_r);
 	DECLARE_WRITE8_MEMBER(profpac_banksw_w);
+	DECLARE_WRITE8_MEMBER(demndrgn_banksw_w);
 	DECLARE_READ8_MEMBER(demndrgn_io_r);
 	DECLARE_WRITE8_MEMBER(demndrgn_sound_w);
 	DECLARE_WRITE8_MEMBER(tenpindx_sound_w);
@@ -140,14 +176,13 @@ public:
 	DECLARE_DRIVER_INIT(ebases);
 	DECLARE_DRIVER_INIT(gorf);
 	DECLARE_DRIVER_INIT(astrocde);
-	virtual void video_start();
+	virtual void video_start() override;
 	DECLARE_PALETTE_INIT(astrocde);
 	DECLARE_VIDEO_START(profpac);
 	DECLARE_PALETTE_INIT(profpac);
 	UINT32 screen_update_astrocde(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	UINT32 screen_update_profpac(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	TIMER_CALLBACK_MEMBER(scanline_callback);
-	void profbank_banksw_restore();
 	inline int mame_vpos_to_astrocade_vpos(int scanline);
 	void init_savestate();
 	void astrocade_trigger_lightpen(UINT8 vfeedback, UINT8 hfeedback);
@@ -155,7 +190,7 @@ public:
 	inline void increment_dest(UINT8 curwidth);
 	void execute_blit(address_space &space);
 	void init_sparklestar();
-	virtual void machine_start();
+	virtual void machine_start() override;
 
 	/*----------- defined in audio/wow.c -----------*/
 	DECLARE_READ8_MEMBER( wow_speech_r );
@@ -166,7 +201,7 @@ public:
 	CUSTOM_INPUT_MEMBER( gorf_speech_status_r );
 
 protected:
-	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr);
+	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr) override;
 };
 
 /*----------- defined in audio/wow.c -----------*/

@@ -33,7 +33,6 @@ public:
 	/* memory pointers */
 	required_shared_ptr<UINT16> m_bg1_videoram;
 	required_shared_ptr<UINT16> m_bg2_videoram;
-//  UINT16 *      m_paletteram;    // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t    *m_bg1_tilemap;
@@ -56,7 +55,6 @@ public:
 	required_device<k053936_device> m_k053936_2;
 	required_device<gfxdecode_device> m_gfxdecode;
 
-	DECLARE_READ16_MEMBER(dbzcontrol_r);
 	DECLARE_WRITE16_MEMBER(dbzcontrol_w);
 	DECLARE_WRITE16_MEMBER(dbz_sound_command_w);
 	DECLARE_WRITE16_MEMBER(dbz_sound_cause_nmi);
@@ -68,9 +66,9 @@ public:
 	DECLARE_DRIVER_INIT(dbz2);
 	TILE_GET_INFO_MEMBER(get_dbz_bg2_tile_info);
 	TILE_GET_INFO_MEMBER(get_dbz_bg1_tile_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_dbz(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	TIMER_DEVICE_CALLBACK_MEMBER(dbz_scanline);
 	K056832_CB_MEMBER(tile_callback);

@@ -18,11 +18,6 @@ if _OPTIONS["NO_OPENGL"]~="1" and _OPTIONS["USE_DISPATCH_GL"]~="1" and _OPTIONS[
 	}
 end
 
-if _OPTIONS["SDL_INI_PATH"]~=nil then
-    defines {
-        "'INI_PATH=\"" .. _OPTIONS["SDL_INI_PATH"] .. "\"'",
-    }
-end
 
 if _OPTIONS["NO_X11"]=="1" then
 	defines {
@@ -130,7 +125,7 @@ elseif _OPTIONS["targetos"]=="linux" then
 		}
 	else
 		buildoptions {
-			backtick("pkg-config --cflags QtGui"),
+			backtick("pkg-config --cflags Qt5Widgets"),
 		}
 	end
 elseif _OPTIONS["targetos"]=="macosx" then
@@ -144,6 +139,9 @@ elseif _OPTIONS["targetos"]=="freebsd" then
 		"-isystem /usr/local/include",
 	}
 elseif _OPTIONS["targetos"]=="os2" then
+	defines {
+		"SDLMAME_OS2",
+	}
 	buildoptions {
 		backtick(sdlconfigcmd() .. " --cflags"),
 	}

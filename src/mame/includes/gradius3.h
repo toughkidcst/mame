@@ -16,6 +16,7 @@ public:
 	gradius3_state(const machine_config &mconfig, device_type type, const char *tag)
 		: driver_device(mconfig, type, tag),
 		m_gfxram(*this, "k052109"),
+		m_gfxrom(*this, "k051960"),
 		m_maincpu(*this, "maincpu"),
 		m_audiocpu(*this, "audiocpu"),
 		m_subcpu(*this, "sub"),
@@ -25,10 +26,7 @@ public:
 
 	/* memory pointers */
 	required_shared_ptr<UINT16> m_gfxram;
-
-	/* video-related */
-	int         m_layer_colorbase[3];
-	int         m_sprite_colorbase;
+	required_region_ptr<UINT8> m_gfxrom;
 
 	/* misc */
 	int         m_priority;
@@ -56,9 +54,9 @@ public:
 	DECLARE_READ16_MEMBER(gradius3_gfxrom_r);
 	DECLARE_WRITE16_MEMBER(gradius3_gfxram_w);
 	DECLARE_WRITE8_MEMBER(sound_bank_w);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_gradius3(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(cpuA_interrupt);
 	TIMER_DEVICE_CALLBACK_MEMBER(gradius3_sub_scanline);

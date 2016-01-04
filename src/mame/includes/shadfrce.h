@@ -13,6 +13,14 @@ public:
 		m_gfxdecode(*this, "gfxdecode"),
 		m_screen(*this, "screen"),
 		m_palette(*this, "palette"),
+		m_io_p1(*this, "P1"),
+		m_io_p2(*this, "P2"),
+		m_io_dsw1(*this, "DSW1"),
+		m_io_dsw2(*this, "DSW2"),
+		m_io_other(*this, "OTHER"),
+		m_io_extra(*this, "EXTRA"),
+		m_io_misc(*this, "MISC"),
+		m_io_system(*this, "SYSTEM"),
 		m_fgvideoram(*this, "fgvideoram"),
 		m_bg0videoram(*this, "bg0videoram"),
 		m_bg1videoram(*this, "bg1videoram"),
@@ -25,12 +33,21 @@ public:
 	required_device<screen_device> m_screen;
 	required_device<palette_device> m_palette;
 
+	required_ioport m_io_p1;
+	required_ioport m_io_p2;
+	required_ioport m_io_dsw1;
+	required_ioport m_io_dsw2;
+	required_ioport m_io_other;
+	required_ioport m_io_extra;
+	required_ioport m_io_misc;
+	required_ioport m_io_system;
+
 	required_shared_ptr<UINT16> m_fgvideoram;
 	required_shared_ptr<UINT16> m_bg0videoram;
 	required_shared_ptr<UINT16> m_bg1videoram;
 	required_shared_ptr<UINT16> m_spvideoram;
 
-	UINT16 *m_spvideoram_old;
+	std::unique_ptr<UINT16[]> m_spvideoram_old;
 	tilemap_t *m_fgtilemap;
 	tilemap_t *m_bg0tilemap;
 	tilemap_t *m_bg1tilemap;
@@ -60,7 +77,7 @@ public:
 	TILE_GET_INFO_MEMBER(get_bg0tile_info);
 	TILE_GET_INFO_MEMBER(get_bg1tile_info);
 
-	virtual void video_start();
+	virtual void video_start() override;
 
 	TIMER_DEVICE_CALLBACK_MEMBER(scanline);
 

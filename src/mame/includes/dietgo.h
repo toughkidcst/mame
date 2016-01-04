@@ -34,7 +34,6 @@ public:
 	required_shared_ptr<UINT16> m_pf2_rowscroll;
 	required_shared_ptr<UINT16> m_spriteram;
 	optional_device<decospr_device> m_sprgen;
-//  UINT16 *  m_paletteram;    // currently this uses generic palette handling (in decocomn.c)
 
 	/* devices */
 	required_device<cpu_device> m_maincpu;
@@ -43,7 +42,7 @@ public:
 	required_device<decocomn_device> m_decocomn;
 	required_shared_ptr<UINT16> m_decrypted_opcodes;
 	DECLARE_DRIVER_INIT(dietgo);
-	virtual void machine_start();
+	virtual void machine_start() override;
 	UINT32 screen_update_dietgo(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	DECO16IC_BANK_CB_MEMBER(bank_callback);
 

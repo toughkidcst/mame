@@ -70,17 +70,36 @@ public:
 	// live configuration
 	void set_bank(int banknum, int offset) { m_bank[banknum] = offset; }
 	void set_flip(bool flip) { m_flip = flip; }
+	void set_local_origin(int x, int y)
+	{
+		m_xoffs_flipped = m_xoffs = x;
+		m_yoffs_flipped = m_yoffs = y;
+		set_origin(x, y);
+	}
+
+	void set_local_origin(int x, int y, int xf, int yf)
+	{
+		m_xoffs = x;
+		m_yoffs = y;
+		m_xoffs_flipped = xf;
+		m_yoffs_flipped = yf;
+		set_origin(x, y);
+	}
+
 
 	// write trigger memory handler
 	DECLARE_WRITE16_MEMBER( draw_write );
 
 protected:
 	// device-level overrides
-	virtual void device_start();
+	virtual void device_start() override;
 
 	// internal state
 	bool                        m_flip;                 // screen flip?
 	UINT8                       m_bank[16];             // banking redirection
+	int m_xoffs, m_yoffs;
+	int m_xoffs_flipped, m_yoffs_flipped;
+
 };
 
 
@@ -94,7 +113,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 };
 
 
@@ -108,7 +127,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 };
 
 
@@ -123,7 +142,7 @@ protected:
 	sega_outrun_sprite_device(const machine_config &mconfig, const char *tag, device_t *owner, UINT32 clock, bool xboard_variant, const char *shortname, const char *source);
 
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 
 	// configuration
 	bool            m_is_xboard;
@@ -147,7 +166,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 };
 
 
@@ -164,7 +183,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 
 	// internal state
 	UINT8       m_addrmap[8];
@@ -181,7 +200,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 };
 
 
@@ -196,7 +215,7 @@ public:
 
 protected:
 	// subclass overrides
-	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect);
+	virtual void draw(bitmap_ind16 &bitmap, const rectangle &cliprect) override;
 
 	rotate_info*                        m_segaic16_rotate;
 };

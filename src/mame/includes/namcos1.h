@@ -23,7 +23,10 @@ public:
 		m_spriteram(*this, "spriteram"),
 		m_playfield_control(*this, "pfcontrol"),
 		m_triram(*this, "triram"),
-		m_rom(*this, "user1") { }
+		m_rom(*this, "user1"),
+		m_soundbank(*this, "soundbank"),
+		m_mcubank(*this, "mcubank"),
+		m_io_dipsw(*this, "DIPSW") { }
 
 	required_device<cpu_device> m_maincpu;
 	required_device<cpu_device> m_subcpu;
@@ -39,8 +42,12 @@ public:
 	required_shared_ptr<UINT8> m_spriteram;
 	required_shared_ptr<UINT8> m_playfield_control;
 	required_shared_ptr<UINT8> m_triram;
-
 	required_region_ptr<UINT8> m_rom;
+
+	required_memory_bank m_soundbank;
+	required_memory_bank m_mcubank;
+
+	required_ioport m_io_dipsw;
 
 	int m_dac0_value;
 	int m_dac1_value;
@@ -116,9 +123,9 @@ public:
 	DECLARE_DRIVER_INIT(ws89);
 	DECLARE_DRIVER_INIT(dspirit);
 	DECLARE_DRIVER_INIT(pistoldm);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	void driver_init();
 
 	TILE_GET_INFO_MEMBER(bg_get_info0);

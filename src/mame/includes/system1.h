@@ -13,15 +13,16 @@ public:
 		m_spriteram(*this, "spriteram"),
 		m_nob_mcu_latch(*this, "nob_mcu_latch"),
 		m_nob_mcu_status(*this, "nob_mcu_status"),
+		m_paletteram(*this, "palette"),
 		m_maincpu(*this, "maincpu"),
 		m_soundcpu(*this, "soundcpu"),
 		m_mcu(*this, "mcu"),
 		m_gfxdecode(*this, "gfxdecode"),
 		m_screen(*this, "screen"),
 		m_palette(*this, "palette"),
-		m_generic_paletteram_8(*this, "paletteram"),
 		m_decrypted_opcodes(*this, "decrypted_opcodes"),
 		m_maincpu_region(*this, "maincpu"),
+		m_color_prom(*this, "palette"),
 		m_bank1(*this, "bank1"),
 		m_bank0d(*this, "bank0d"),
 		m_bank1d(*this, "bank1d") { }
@@ -31,8 +32,9 @@ public:
 	required_shared_ptr<UINT8> m_spriteram;
 	optional_shared_ptr<UINT8> m_nob_mcu_latch;
 	optional_shared_ptr<UINT8> m_nob_mcu_status;
+	required_shared_ptr<UINT8> m_paletteram;
 
-	UINT8 *m_videoram;
+	std::unique_ptr<UINT8[]> m_videoram;
 	void (system1_state::*m_videomode_custom)(UINT8 data, UINT8 prevdata);
 	UINT8 m_mute_xor;
 	UINT8 m_dakkochn_mux_data;
@@ -40,9 +42,9 @@ public:
 	UINT8 m_mcu_control;
 	UINT8 m_nob_maincpu_latch;
 	int m_nobb_inport23_step;
-	UINT8 *m_mix_collide;
+	std::unique_ptr<UINT8[]> m_mix_collide;
 	UINT8 m_mix_collide_summary;
-	UINT8 *m_sprite_collide;
+	std::unique_ptr<UINT8[]> m_sprite_collide;
 	UINT8 m_sprite_collide_summary;
 	bitmap_ind16 m_sprite_bitmap;
 	UINT8 m_video_mode;
@@ -115,10 +117,11 @@ public:
 	DECLARE_DRIVER_INIT(seganinj);
 	DECLARE_DRIVER_INIT(gardia);
 	DECLARE_DRIVER_INIT(spatter);
+	DECLARE_DRIVER_INIT(spattera);
 	TILE_GET_INFO_MEMBER(tile_get_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	DECLARE_MACHINE_START(system2);
 	DECLARE_VIDEO_START(system2);
 	UINT32 screen_update_system1(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
@@ -141,12 +144,12 @@ public:
 	required_device<gfxdecode_device> m_gfxdecode;
 	required_device<screen_device> m_screen;
 	required_device<palette_device> m_palette;
-	required_shared_ptr<UINT8> m_generic_paletteram_8;
 	optional_shared_ptr<UINT8> m_decrypted_opcodes;
 	required_memory_region m_maincpu_region;
+	optional_region_ptr<UINT8> m_color_prom;
 	required_memory_bank m_bank1;
 	optional_memory_bank m_bank0d;
 	optional_memory_bank m_bank1d;
 
-	UINT8 *m_banked_decrypted_opcodes;
+	std::unique_ptr<UINT8[]> m_banked_decrypted_opcodes;
 };

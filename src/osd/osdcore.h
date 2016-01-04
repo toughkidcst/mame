@@ -165,6 +165,25 @@ file_error osd_read(osd_file *file, void *buffer, UINT64 offset, UINT32 length, 
 -----------------------------------------------------------------------------*/
 file_error osd_write(osd_file *file, const void *buffer, UINT64 offset, UINT32 length, UINT32 *actual);
 
+/*-----------------------------------------------------------------------------
+    osd_openpty: create a new PTY pair
+
+    Parameters:
+
+        file - pointer to an osd_file * to receive the handle of the master
+            side of the newly-created PTY; this is only valid if the function
+            returns FILERR_NONE
+
+        name - pointer to memory where slave filename will be stored
+
+        name_len - space allocated for name
+
+    Return value:
+
+        a file_error describing any error that occurred while creating the
+        PTY, or FILERR_NONE if no error occurred
+-----------------------------------------------------------------------------*/
+file_error osd_openpty(osd_file **file, char *name, size_t name_len);
 
 /*-----------------------------------------------------------------------------
     osd_truncate: change the size of an open file
@@ -656,7 +675,7 @@ osd_work_item *osd_work_item_queue_multiple(osd_work_queue *queue, osd_work_call
 
 
 /* inline helper to queue a single work item using the same interface */
-INLINE osd_work_item *osd_work_item_queue(osd_work_queue *queue, osd_work_callback callback, void *param, UINT32 flags)
+static inline osd_work_item *osd_work_item_queue(osd_work_queue *queue, osd_work_callback callback, void *param, UINT32 flags)
 {
 	return osd_work_item_queue_multiple(queue, callback, 1, param, 0, flags);
 }
@@ -943,7 +962,7 @@ enum osd_output_channel
 class osd_output
 {
 public:
-	osd_output() : m_chain(NULL) { }
+	osd_output() : m_chain(nullptr) { }
 	virtual ~osd_output() { }
 
 	virtual void output_callback(osd_output_channel channel, const char *msg, va_list args) = 0;
@@ -954,7 +973,7 @@ protected:
 
 	void chain_output(osd_output_channel channel, const char *msg, va_list args)
 	{
-		if (m_chain != NULL)
+		if (m_chain != nullptr)
 			m_chain->output_callback(channel, msg, args);
 	}
 private:

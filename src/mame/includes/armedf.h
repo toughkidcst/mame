@@ -28,12 +28,11 @@ public:
 	required_device<buffered_spriteram16_device> m_spriteram;
 
 	/* memory pointers */
-	UINT8 *m_text_videoram;
+	std::unique_ptr<UINT8[]> m_text_videoram;
 	required_shared_ptr<UINT16> m_spr_pal_clut;
 	required_shared_ptr<UINT16> m_fg_videoram;
 	required_shared_ptr<UINT16> m_bg_videoram;
 	UINT16 m_legion_cmd[4]; // legionjb only!
-//  UINT16 *  m_paletteram;   // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t  *m_bg_tilemap;

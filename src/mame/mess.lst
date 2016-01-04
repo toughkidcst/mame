@@ -40,6 +40,7 @@ dendy     // Dendy (Classic russian famiclone)
 gchinatv  // Golden China TV Game Centre (Chinese famiclone)
 gameboy   // Nintendo Game Boy Handheld
 supergb   // Nintendo Super Game Boy SNES Cartridge
+supergb2
 gbpocket  // Nintendo Game Boy Pocket Handheld
 gbcolor   // Nintendo Game Boy Color Handheld
 gba       // Nintendo Game Boy Advance Handheld
@@ -76,10 +77,12 @@ smssdisp  // Sega Master System Store Display Unit
 megadrij  // 1988 Sega Mega Drive (Japan)
 genesis   // 1989 Sega Genesis (USA)
 megadriv  // 1990 Sega Mega Drive (Europe)
+genesis_tmss //
 pico      // 1994 Sega Pico (Europe)
 picou    // 1994 Sega Pico (USA)
 picoj    // 1993 Sega Pico (Japan)
 copera  // 1993 Sega / Yamaha
+sawatte //
 segacd  // 1992 Sega Sega CD (USA)
 megacd  // 1993 Sega Mega-CD (Europe)
 megacda // 1993 Sega Mega-CD (Asia)
@@ -99,6 +102,9 @@ multmega  // 1994 Sega Multi-Mega (Europe)
 32xe
 32xj
 32x_scd   // 1994 Sega Sega CD (USA w/32X addon)
+32x_mcd   // 1995 Sega Mega-CD (Europe w/32X addon)
+32x_mcdj   // 1994 Sega Mega-CD (Japan w/32X addon)
+segapm    // 1996 Sega Picture Magic (32x type hardware)
 
 saturnjp  // 1994 Sega Saturn (Japan)
 saturn  // 1995 Sega Saturn (USA)
@@ -110,7 +116,6 @@ dcjp      // 1998 Sega Dreamcast (Japan)
 dc  // 1999 Sega Dreamcast (USA)
 dceu      // 1999 Sega Dreamcast (Europe)
 dcdev    // 1998 Sega HKT-0120 Sega Dreamcast Development Box
-dcprt    // 1998 Sega Katana Set 5 Prototype
 
 svmu     // 1998 Sega Visual Memory Unit
 
@@ -254,6 +259,7 @@ telngtcs
 krvnjvtv
 oc2000
 mpt05
+h21     // TRQ Video Computer H-21
 
 
 // Game Park
@@ -282,6 +288,9 @@ odyssey3  // Magnavox Odyssey 3 / Command Center (prototype)
 
 // Makerbot
 replica1  // Makerbot Replicator 1 desktop 3d printer
+
+// Metamaquina
+metamaq2  // Metamaquina 2 desktop 3d printer
 
 // Hartung, Watara, ...
 gmaster   // Hartung Gamemaster
@@ -316,7 +325,10 @@ neocdz  // NeoGeo CDZ
 neocdzj //
 
 // Philips
-cdimono1  // Philips CD-i (Mono-I board)
+cdimono1  // Philips CD-i model 200 (Mono-I board, PAL)
+cdimono2  // Philips CD-i model 220 (Mono-II board, NTSC)
+cdi910 //
+cdi490a //
 
 // Yamaha
 mu100   // 1997 MU-100
@@ -324,7 +336,6 @@ mu100r  // 1997 MU-100 Rackable version
 fb01    // 1986 FB-01
 
 // Roland
-tb303
 mt32
 cm32l
 d110
@@ -334,17 +345,26 @@ sc55    // 1991 Sound Canvas SC-55
 
 // Acorn
 acrnsys1  // 1979 Acorn System 1 (Microcomputer Kit)
+a6809
 atom      // 1979 Acorn Atom
 atomeb    // 1979 Acorn Atom
 atombb    // 1979 Acorn Atom
 //prophet2
 bbca      // 1981 BBC Micro Model A
-bbcb      // 1981 BBC Micro Model B
-bbcb_de   // 1981 BBC Micro Model B (German)
-bbcb_us   // 1981 BBC Micro Model B (US)
+bbcb      // 1981 BBC Micro Model B w/8271 FDC
+torchf    // 1982 Torch CF240
+torchh10  // 1982 Torch CH240/10
+torchh21  // 1982 Torch CH240/21
+bbcb_de   // 1982 BBC Micro Model B (German)
+bbcb_us   // 1983 BBC Micro Model B (US)
 electron  // 1983 Acorn Electron
+bbcb1770  // 1984 BBC Micro Model B w/1770 FDC
 bbcbp     // 1985 BBC Micro Model B+ 64K
 bbcbp128  // 1985 BBC Micro Model B+ 128K
+abc110    // 1985 ABC 110
+acw443    // 1985 ABC 210/Cambridge Workstation
+abc310    // 1985 ABC 310
+reutapm   // 1985 Reuters APM Board
 bbcm      // 1986 BBC Master 128
 bbcmt     // 1986 BBC Master Turbo
 bbcmaiv   // 1986 BBC Master AIV
@@ -352,14 +372,14 @@ bbcmet    // 1986 BBC Master ET
 bbcm512   // 1986 BBC Master 512
 bbcmarm   // 1986 ARM Evaluation System
 bbcmc     // 1986 BBC Master Compact
-bbcmc_ar  // 1986 BBC Master Comapact (Arabic)
+bbcmc_ar  // 1986 BBC Master Compact (Arabic)
+pro128s   // 1987 Olivetti Prodest PC 128S
 bbcbc     // 1985 BBC Bridge Companion
 a310      // 1988 Acorn Archimedes 310
 a3010     // 1988 Acorn Archimedes 3010
 a3020     // 1988 Acorn Archimedes 3020
 a7000     // 1995 Acorn Archimedes 7000
 a7000p    // 1997 Acorn Archimedes 7000+
-a6809
 rpc600
 rpc700
 sarpc
@@ -430,6 +450,8 @@ prav82  // Pravetz 82
 prav8m  // Pravetz 8M
 uniap2en // 1982 Unitron AP II (in English)
 uniap2pt // 1982 Unitron AP II (in Brazilian Portuguese)
+uniap2ti // 1982 Unitron AP II+ (Teclado Inteligente)
+microeng // 1982 Micro Engenho (Brazilian Apple2 clone) - Spectrum/SCOPUS
 apple2jp  // ??? ???? Apple ][j+
 apple2e   // Jan 1983 Apple //e
 apple2euk // Jan 1983 Apple //e (UK)
@@ -511,7 +533,7 @@ macpb145  // 1992 Apple Macintosh PowerBook 145
 macpb160    // 1992 Apple Macintosh PowerBook 160
 macpb180    // 1992 Apple Macintosh PowerBook 180
 macpb180c // 1992 Apple Macintosh PowerBook 180c
-//macpd210  // 1992 Apple Macintosh PowerBook Duo 210
+macpd210  // 1992 Apple Macintosh PowerBook Duo 210
 maccclas // 1993 Apple Macintosh Color Classic
 macpb145b  // 1993 Apple Macintosh PowerBook 145B
 maclc3  // 1993 Apple Macintosh LC III
@@ -607,6 +629,7 @@ cbm4032b
 pet8032
 cbm8032
 cbm8032_de
+cbm8032_fr
 cbm8032_se
 superpet
 mmf9000
@@ -717,6 +740,9 @@ a4000tn
 c65    // 1991 C65 / C64DX (Prototype, NTSC)
 c64dx    // 1991 C65 / C64DX (Prototype, German PAL)
 
+mps1000 // 1986 Commodore MPS-1000 (dot matrix printer)
+mps1230 // 1988 Commodore MPS-1230 near-letter-quality dot matrix printer
+
 // Epson
 px4    // 1985 Epson PX-4
 px4p      // 1985 Epson PX-4+
@@ -740,15 +766,18 @@ europc  // 1988 Schneider Euro PC (CGA or Hercules)
 compc1  // 1984 Commodore PC-1
 pc10iii // 1987 Commodore PC-10 III
 pc7000  // 1985 Sharp PC-7000
-olypeopl // Olympia People PC
 sx16    // Sanyo SX-16
 mbc16   // Sanyo MBC-16
 ataripc3
 ssam88s
+sicpc1605
+eagle1600
 
 // Non-PC msdos
 pcd     // Siemens PC-D
+pcx     // Siemens PC-X
 slicer  // 1983 Slicer Computers
+olypeopl // Olympia People PC
 
 // PC Junior
 ibmpcjr   // 1984 IBM PC Jr
@@ -999,9 +1028,10 @@ zslc3000 // Sharp Zaurus SL-C3000 "Spitz"
 zslc1000 // Sharp Zaurus SL-C1000 "Akita"
 
 // Silicon Graphics
-sgi_ip2 // IP2: IRIS 2x00, 68020, 16MHz
+sgi_ip2 // IP2: IRIS 3xx0, 68020, 16MHz
 sgi_ip6   // IP6: 4D/PI, R2000, 20MHz
-ip204415  // IP20: Indigo 1, R4400, 150MHz
+indigo3k  // IP12: Indigo 1, R3000, 33MHz
+indigo4k  // IP20: Indigo 1, R4400, 150MHz
 ip225015  // IP22: Indy, R5000, 150MHz
 ip224613    // IP22: Indy, R4600, 133MHz
 ip244415    // IP24: Indigo 2, R4400, 150MHz
@@ -1040,16 +1070,6 @@ avigo_es     // 1997 Avigo (Spanish)
 avigo_it     // 1997 Avigo (Italian)
 
 // Texas Instruments Calculators
-tisr16    // 1974 SR-16
-tisr16ii
-ti1270
-ti1000
-ti30      // 1976 TI-30
-tiprog
-tibusan1
-wizatron
-lilprof
-lilprof78
 ti73      // 1990 TI-73
 ti74      // 1985 TI-74
 ti95      // 1986 TI-95
@@ -1290,6 +1310,8 @@ gwnf     // Genius Winner Notebook Fun (Germany)
 gl6000sl // Genius Leader 6000SL (Germany)
 gl7007sl // Genius Leader 7007SL (Germany)
 glcolor  // Genius Leader Color (Germany)
+snotec   // Bandai Super Note Club (Japan)
+snotecex // Bandai Super Note Club EX (Japan)
 glmcolor // Genius Leader Magic Color (Germany)
 glscolor // Genius Leader Super Color (Germany)
 gjrstar3 // Genius Junior Redstar 3 (Germany)
@@ -1299,6 +1321,8 @@ gjrstar  // Genius Junior Redstar(Germany)
 gjrstar2 // Genius Junior Redstar 2 (Germany)
 gj5000   // Genius Junior 5000 (Germany)
 gl6600cx // Genius Leader 6600CX (Germany)
+gkidabc  // Genius KID ABC Fan (Germany)
+cars2lap // CARS 2 Laptop (Germany)
 glpn     // Genius Leader Power Notebook (Germany)
 lexipcm  // LexiPC Mega 2000 (Germany)
 pitagjr  // Pitagorin Junior
@@ -1346,6 +1370,7 @@ canonv20e
 canonv20f
 canonv20g
 canonv20s
+canons80
 mx10
 mx101
 mx15
@@ -1587,6 +1612,9 @@ hbf9sp
 fsa1gt
 fsa1st
 
+// Microsoft
+xbox
+
 // NASCOM Microcomputers
 nascom1   // 1978 Nascom 1
 nascom2   // 1979 Nascom 2
@@ -1600,6 +1628,7 @@ mekd2    // 1977 Motorola Evaluation Kit
 
 // DEC
 pdp1      // 1961 DEC PDP1
+la120 // 1978 Digital Equipment Corporation
 vt100 // 1978 Digital Equipment Corporation
 //vt100wp // 1978 Digital Equipment Corporation
 //vt100stp // 1978 Digital Equipment Corporation
@@ -1646,6 +1675,7 @@ hs
 
 // Exidy, Inc.
 sorcerer     // Sorcerer
+sorcerer2   // monitor 1.1 1979
 sorcererd    // Sorcerer with floppies
 
 // Galaksija
@@ -1753,6 +1783,9 @@ tmc600s2
 //osc1000b
 nano
 
+// Escola Politecnica da USP (Brazil)
+patinho // 1972 Patinho Feio
+
 // MIT
 tx0_64kw  // April 1956 MIT TX-0 (64kw RAM)
 tx0_8kw   // 1962 MIT TX-0 (8kw RAM)
@@ -1827,6 +1860,9 @@ lik
 erik
 specimx
 pioner
+
+// Steve Ciarcia (this is the name of the designer, not a company) / BYTE / McGRAW-HILL
+zapcomp    // (1981) ZAP computer - Z80 Applications Processor
 
 // Orion
 orion128
@@ -1993,6 +2029,8 @@ newbrainmd
 mm1m6
 mm1m7
 
+noki3310
+
 // Nuova Elettronica
 z80ne    // 1980 - Z80NE
 z80net  // 1980 - Z80NE + LX388 Video Interface
@@ -2158,9 +2196,14 @@ bmboxing    // Bambino
 bfriskyt    // Bandai
 packmon     // Bandai
 msthawk     // Bandai/Mattel
+bzaxxon     // Bandai
 zackman     // Bandai
+bpengo      // Bandai
+bbtime      // Bandai
 bdoramon    // Bandai
+bultrman    // Bandai
 machiman    // Bandai
+pairmtch    // Bandai
 alnattck    // Coleco
 cdkong      // Coleco
 cgalaxn     // Coleco
@@ -2183,9 +2226,15 @@ vinvader    // VTech
 
 // hh_melps4
 cfrogger    // Coleco
+gjungler    // Gakken
 
 // hh_pic16
 maniac      // Ideal
+
+// hh_sm510
+ktopgun     // Konami
+ktmnt       // Konami
+gnwmndon    // Nintendo
 
 // hh_tms1k
 mathmagi    // APF
@@ -2204,8 +2253,9 @@ gpoker      // Gakken
 gjackpot    // Gakken
 elecdet     // Ideal
 starwbc     // Kenner
-starwbcp    // Kenner (prototype)
+starwbcp    // Kenner (patent)
 astro       // Kosmos
+mdndclab    // Mattel
 comp4       // Milton Bradley
 simon       // Milton Bradley
 ssimon      // Milton Bradley
@@ -2213,29 +2263,54 @@ bigtrak     // Milton Bradley
 cnsector    // Parker Bros
 merlin      // Parker Bros
 stopthie    // Parker Bros
-stopthiep   // Parker Bros (prototype)
+stopthiep   // Parker Bros (patent)
 bankshot    // Parker Bros
 splitsec    // Parker Bros
 mmerlin     // Parker Bros
 tandy12     // Tandy Radio Shack
 tbreakup    // Tomy
+phpball     // Tomy
 
 // hh_tms1k derivatives
 elecbowl    // Marx
 mbdtower    // Milton Bradley
 
-// TI snspell
+// hh_tms1k ticalc1x.cpp
+tisr16
+tisr16ii
+ti1270
+ti1000
+ti30
+tiprog
+tibusan1
+wizatron
+lilprof
+lilprof78
+dataman
+
+// hh_tms1k tispeak.cpp
 snspell
+snspellp
 snspella
 snspellb
 snspelluk
 snspelluka
 snspelljp
-ladictee
+snspellfr
+snspellit
 snmath
 snmathp
 snread
 lantutor
+tntell
+tntelluk
+tntellfr
+tntellp
+vocaid
+
+// hh_tms1k tispellb.cpp
+spellb
+mrchalgr
 
 // hh_ucom4
 ufombs      // Bambino
@@ -2244,6 +2319,7 @@ bmsoccer    // Bambino
 bmsafari    // Bambino
 splasfgt    // Bambino
 bcclimbr    // Bandai
+tactix      // Castle Toy
 invspace    // Epoch
 efball      // Epoch
 galaxy2     // Epoch
@@ -2255,6 +2331,9 @@ tmtennis    // Tomy
 tmscramb    // Tomy
 tcaveman    // Tomy
 alnchase    // Tomy
+
+// hh_ucom4 derivatives
+tb303       // Roland
 
 // other
 tama        // Bandai
@@ -2269,17 +2348,17 @@ wildfire    // Parker Bros
 
 ssem // Manchester Small-Scale Experimental Machine, "Baby"
 craft // Craft, by [lft]
-
+r9751 // ROLM 9751 phone system
 
 //********** To sort (mostly skeleton drivers) *****************************
 
 a5105
 attache
-attachef
 bcs3
 bcs3a
 bcs3b
 bcs3c
+bcs3d
 bob85
 c80
 ds348 //Sigtron Daruma
@@ -2429,6 +2508,7 @@ indiana
 vector4
 unistar
 dual68
+sdk80
 sdk85
 rpc86
 isbc86
@@ -2540,6 +2620,7 @@ tek4052a
 //tek4054
 tek4107a
 tek4109a
+tekxp330
 phunsy
 ob68k1a
 vta2000
@@ -2573,6 +2654,9 @@ prose2ko
 eacc
 argo
 applix
+mzr8105
+hk68v10
+fccpu1
 68ksbc
 lcmate2
 cm1800
@@ -2618,7 +2702,9 @@ itt3030
 vax785
 ms0515
 ie15
+dvk_kcgd
 dvk_ksm
+dvk_ksm01
 asmapro
 asma2k
 altos5
@@ -2669,6 +2755,7 @@ mcb216
 cb308
 myvision
 mkit09
+mkit09a
 cpu09
 ivg09
 pulsarlb
@@ -2687,9 +2774,30 @@ tecnbras
 minicom
 mcom4_02
 gameking
+gamekin3
 leapster
 leapstertv
 excali64
 bitgrpha
 bitgrphb
 tvgame
+aussieby
+hp_ipc
+lggp40
+mt735
+squale
+micral
+rd100
+proteus3
+unichamp
+st1700h
+st1701
+st1702
+st1703
+st1704
+st1705
+st1706
+st1707
+st1708
+st1714
+sanfuze2

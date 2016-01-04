@@ -125,7 +125,7 @@ public:
 	optional_shared_ptr<UINT16> m_decrypted_opcodes;
 
 	DECLARE_WRITE16_MEMBER(sound_command_nmi_w);
-	DECLARE_WRITE16_MEMBER(sound_command_w);
+	DECLARE_WRITE16_MEMBER(sound_command_irq_w);
 	DECLARE_WRITE16_MEMBER(sys16_coinctrl_w);
 	DECLARE_READ16_MEMBER(passht4b_service_r);
 	DECLARE_READ16_MEMBER(passht4b_io1_r);
@@ -159,11 +159,9 @@ public:
 	DECLARE_WRITE16_MEMBER(sys18_tilebank_w);
 	DECLARE_READ8_MEMBER(system18_bank_r);
 	DECLARE_WRITE8_MEMBER(sys18_soundbank_w);
-	DECLARE_WRITE16_MEMBER(sound_command_irq_w);
 	DECLARE_WRITE8_MEMBER(shdancbl_msm5205_data_w);
 	DECLARE_READ8_MEMBER(shdancbl_soundbank_r);
 	DECLARE_WRITE8_MEMBER(shdancbl_bankctrl_w);
-	DECLARE_WRITE16_MEMBER(sys16_paletteram_w);
 	DECLARE_WRITE16_MEMBER(sys16_tileram_w);
 	DECLARE_WRITE16_MEMBER(sys16_textram_w);
 	DECLARE_WRITE16_MEMBER(s16a_bootleg_bgscrolly_w);

@@ -16,7 +16,11 @@ public:
 		m_screen(*this, "screen"),
 		m_palette(*this, "palette"),
 		m_spriteram(*this, "spriteram"),
-		m_spriteram2(*this, "spriteram2")
+		m_spriteram2(*this, "spriteram2"),
+		m_bank1(*this, "bank1"),
+		m_bank2(*this, "bank2")
+
+
 	{ }
 
 	required_device<cpu_device> m_maincpu;
@@ -31,7 +35,11 @@ public:
 	required_shared_ptr<UINT16> m_spriteram;
 	optional_shared_ptr<UINT16> m_spriteram2;
 
-	UINT16 *m_paletteram;
+	optional_memory_bank m_bank1;
+	optional_memory_bank m_bank2;
+
+
+	std::unique_ptr<UINT16[]> m_paletteram;
 	int m_color_bank;
 	UINT8 m_prot;
 
@@ -66,7 +74,7 @@ public:
 	TIMER_DEVICE_CALLBACK_MEMBER(bssoccer_interrupt);
 
 	DECLARE_DRIVER_INIT(uballoon);
-	virtual void video_start();
+	virtual void video_start() override;
 	DECLARE_MACHINE_START(bestbest);
 	DECLARE_MACHINE_START(bssoccer);
 	DECLARE_MACHINE_START(uballoon);

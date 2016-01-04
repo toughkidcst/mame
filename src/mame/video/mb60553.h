@@ -12,18 +12,17 @@ public:
 	static void set_gfx_region(device_t &device, int gfxregion);
 
 	tilemap_t* m_tmap;
-	UINT16* m_vram;
+	std::unique_ptr<UINT16[]> m_vram;
 	UINT16 m_regs[8];
 	UINT8 m_bank[8];
 	UINT16 m_pal_base;
 	void reg_written( int num_reg);
 	TILE_GET_INFO_MEMBER(get_tile_info);
 	void set_pal_base( int m_pal_base);
-	void set_gfx_region( int m_gfx_region);
 	void draw( screen_device &screen, bitmap_ind16& bitmap, const rectangle &cliprect, int priority);
 	tilemap_t* get_tilemap();
 
-	UINT16* m_lineram;
+	std::unique_ptr<UINT16[]> m_lineram;
 
 	TILEMAP_MAPPER_MEMBER(twc94_scan);
 
@@ -39,12 +38,12 @@ public:
 		UINT32 startx, UINT32 starty, int incxx, int incxy, int incyx, int incyy, bool wraparound);
 
 protected:
-	virtual void device_start();
-	virtual void device_reset();
+	virtual void device_start() override;
+	virtual void device_reset() override;
 
 
 private:
-	UINT8 m_m_gfx_region;
+	UINT8 m_gfx_region;
 
 	required_device<gfxdecode_device> m_gfxdecode;
 

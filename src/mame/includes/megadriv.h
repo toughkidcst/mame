@@ -33,7 +33,7 @@ struct genesis_z80_vars
 	int z80_is_reset;
 	int z80_has_bus;
 	UINT32 z80_bank_addr;
-	UINT8* z80_prgram;
+	std::unique_ptr<UINT8[]> z80_prgram;
 };
 
 
@@ -46,13 +46,16 @@ public:
 		m_z80snd(*this,"genesis_snd_z80"),
 		m_ymsnd(*this,"ymsnd"),
 		m_vdp(*this,"gen_vdp"),
+		m_snsnd(*this, "snsnd"),
 		m_megadrive_ram(*this,"megadrive_ram")
 	{ }
 	required_device<m68000_base_device> m_maincpu;
 	optional_device<cpu_device> m_z80snd;
 	optional_device<ym2612_device> m_ymsnd;
 	required_device<sega315_5313_device> m_vdp;
+	required_device<sn76496_base_device> m_snsnd;
 	optional_shared_ptr<UINT16> m_megadrive_ram;
+
 
 	ioport_port *m_io_reset;
 	ioport_port *m_io_pad_3b[4];

@@ -67,6 +67,7 @@ public:
 	~render_target();
 
 	bool init(renderer *d3d, base *d3dintf, int width, int height, int prescale_x, int prescale_y);
+	int next_index(int index) { return ++index > 1 ? 0 : index; }
 
 	int target_width;
 	int target_height;
@@ -80,12 +81,10 @@ public:
 	int screen_index;
 	int page_index;
 
-	surface *prescaletarget;
-	texture *prescaletexture;
-	surface *smalltarget;
-	texture *smalltexture;
-	surface *target[5];
-	texture *render_texture[5];
+	surface *prescale_target[2];
+	texture *prescale_texture[2];
+	surface *native_target[2];
+	texture *native_texture[2];
 
 	render_target *next;
 	render_target *prev;
@@ -102,13 +101,13 @@ public:
 	renderer(osd_window *window);
 	virtual ~renderer();
 
-	virtual int create();
-	virtual render_primitive_list *get_primitives();
-	virtual int draw(const int update);
-	virtual void save();
-	virtual void record();
-	virtual void toggle_fsfx();
-	virtual void destroy();
+	virtual int create() override;
+	virtual render_primitive_list *get_primitives() override;
+	virtual int draw(const int update) override;
+	virtual void save() override;
+	virtual void record() override;
+	virtual void toggle_fsfx() override;
+	virtual void destroy() override;
 
 	int                     initialize();
 
@@ -179,6 +178,7 @@ public:
 	texture_info *          get_vector_texture() { return m_texture_manager->get_vector_texture(); }
 
 	shaders *               get_shaders() { return m_shaders; }
+	hlsl_options *          get_shaders_options() { return m_shaders_options; }
 
 private:
 	int                     m_adapter;                  // ordinal adapter number
@@ -221,12 +221,13 @@ private:
 
 	void *                  m_hlsl_buf;                 // HLSL vertex data
 	shaders *               m_shaders;                  // HLSL interface
+	hlsl_options *          m_shaders_options;          // HLSL options
 
 	texture_manager *       m_texture_manager;          // texture manager
 
 	int                     m_line_count;
 };
 
-};
+}
 
 #endif

@@ -44,10 +44,9 @@ public:
 	DECLARE_WRITE8_MEMBER(sound_control_w);
 	DECLARE_DRIVER_INIT(unkpacg);
 	TILE_GET_INFO_MEMBER(get_tile_info);
-	DECLARE_PALETTE_INIT(_4enraya);
 	UINT32 screen_update_4enraya(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 };

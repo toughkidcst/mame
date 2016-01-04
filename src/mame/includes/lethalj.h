@@ -6,6 +6,9 @@
 
 **************************************************************************/
 
+#include "machine/ticket.h"
+
+
 class lethalj_state : public driver_device
 {
 public:
@@ -17,12 +20,26 @@ public:
 	lethalj_state(const machine_config &mconfig, device_type type, const char *tag)
 		: driver_device(mconfig, type, tag) ,
 		m_maincpu(*this, "maincpu"),
-		m_screen(*this, "screen") { }
+		m_screen(*this, "screen"),
+		m_ticket(*this, "ticket"),
+		m_paddle(*this, "PADDLE"),
+		m_light0_x(*this, "LIGHT0_X"),
+		m_light0_y(*this, "LIGHT0_Y"),
+		m_light1_x(*this, "LIGHT1_X"),
+		m_light1_y(*this, "LIGHT1_Y")
+	{ }
 
 	required_device<cpu_device> m_maincpu;
 	required_device<screen_device> m_screen;
+	required_device<ticket_dispenser_device> m_ticket;
+	optional_ioport m_paddle;
+	optional_ioport m_light0_x;
+	optional_ioport m_light0_y;
+	optional_ioport m_light1_x;
+	optional_ioport m_light1_y;
+
 	UINT16 m_blitter_data[8];
-	UINT16 *m_screenram;
+	std::unique_ptr<UINT16[]> m_screenram;
 	UINT8 m_vispage;
 	UINT16 *m_blitter_base;
 	int m_blitter_rows;
@@ -39,12 +56,12 @@ public:
 	DECLARE_DRIVER_INIT(cfarm);
 	DECLARE_DRIVER_INIT(ripribit);
 	DECLARE_DRIVER_INIT(cclownz);
-	virtual void video_start();
+	virtual void video_start() override;
 	inline void get_crosshair_xy(int player, int *x, int *y);
 	TMS340X0_SCANLINE_IND16_CB_MEMBER(scanline_update);
 
 protected:
-	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr);
+	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr) override;
 };
 
 /*----------- defined in video/lethalj.c -----------*/

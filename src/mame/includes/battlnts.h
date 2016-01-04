@@ -23,7 +23,6 @@ public:
 
 	/* video-related */
 	int m_spritebank;
-	int m_layer_colorbase[2];
 
 	/* devices */
 	required_device<cpu_device> m_maincpu;
@@ -36,8 +35,8 @@ public:
 	DECLARE_WRITE8_MEMBER(battlnts_sh_irqtrigger_w);
 	DECLARE_WRITE8_MEMBER(battlnts_bankswitch_w);
 	DECLARE_WRITE8_MEMBER(battlnts_spritebank_w);
-	virtual void machine_start();
-	virtual void machine_reset();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
 	UINT32 screen_update_battlnts(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(battlnts_interrupt);
 	K007342_CALLBACK_MEMBER(battlnts_tile_callback);

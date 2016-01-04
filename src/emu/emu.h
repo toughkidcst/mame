@@ -15,10 +15,15 @@
 
 ***************************************************************************/
 
-#pragma once
-
 #ifndef __EMU_H__
 #define __EMU_H__
+
+#include <stdio.h> // must be here otherwise issues with I64FMT in MINGW
+#include <list>
+#include <vector>
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
 // core emulator headers -- must be first
 #include "emucore.h"
@@ -32,7 +37,7 @@
 // emulator-specific utilities
 #include "attotime.h"
 #include "hash.h"
-#include "fileio.h" // remove me once NVRAM is implemented as device
+#include "fileio.h"
 #include "delegate.h"
 #include "devdelegate.h"
 
@@ -55,9 +60,6 @@ typedef device_t * (*machine_config_constructor)(machine_config &config, device_
 #include "ioport.h"
 #include "output.h"
 
-// diimage requires uimenu
-#include "ui/menu.h"
-
 // devices and callbacks
 #include "device.h"
 #include "devfind.h"
@@ -78,6 +80,7 @@ typedef device_t * (*machine_config_constructor)(machine_config &config, device_
 #include "schedule.h"
 #include "timer.h"
 #include "dinetwork.h"
+#include "dipty.h"
 
 // machine and driver configuration
 #include "mconfig.h"
@@ -86,16 +89,6 @@ typedef device_t * (*machine_config_constructor)(machine_config &config, device_
 
 // timers, CPU and scheduling
 #include "devcpu.h"
-
-// image-related
-#include "softlist.h"
-#include "image.h"
-
-// networking
-#include "network.h"
-
-// lua engine
-#include "luaengine.h"
 
 // the running machine
 #include "mame.h"

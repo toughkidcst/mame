@@ -6,7 +6,7 @@
     SGI/Nintendo Reality Display Texture Fetch Unit (TF)
     -------------------
 
-    by MooglyGuy
+    by Ryan Holtz
     based on initial C code by Ville Linde
     contains additional improvements from angrylion, Ziggy, Gonetz and Orkin
 
@@ -27,16 +27,16 @@ class n64_texture_pipe_t
 
 		n64_texture_pipe_t()
 		{
-			m_maskbits_table[0] = 0x3ff;
+			m_maskbits_table[0] = 0xffff;
 			for(int i = 1; i < 16; i++)
 			{
 				m_maskbits_table[i] = ((UINT16)(0xffff) >> (16 - i)) & 0x3ff;
 			}
 			m_start_span = false;
 
-			for (int idx = 0; idx < 80; idx++)
+			for (auto & elem : m_texel_fetch)
 			{
-				m_texel_fetch[idx] = &n64_texture_pipe_t::fetch_nop;
+				elem = &n64_texture_pipe_t::fetch_nop;
 			}
 
 			m_texel_fetch[ 8] = &n64_texture_pipe_t::fetch_rgba16_raw;
@@ -108,8 +108,7 @@ class n64_texture_pipe_t
 		bool                m_start_span;
 
 	private:
-		void                mask(rgbaint_t& st, const n64_tile_t& tile);
-		void                mask_coupled(rgbaint_t& sstt, const n64_tile_t& tile);
+		void                mask(rgbaint_t& sstt, const n64_tile_t& tile);
 
 		rgbaint_t           shift_cycle(rgbaint_t& st, const n64_tile_t& tile);
 		void                shift_copy(rgbaint_t& st, const n64_tile_t& tile);

@@ -50,7 +50,6 @@ public:
 	DECLARE_READ8_MEMBER(striv_question_r);
 	DECLARE_WRITE8_MEMBER(jack_videoram_w);
 	DECLARE_WRITE8_MEMBER(jack_colorram_w);
-	DECLARE_WRITE8_MEMBER(jack_paletteram_w);
 	DECLARE_READ8_MEMBER(jack_flipscreen_r);
 	DECLARE_WRITE8_MEMBER(jack_flipscreen_w);
 	DECLARE_READ8_MEMBER(timer_r);
@@ -75,9 +74,9 @@ public:
 	UINT32 screen_update_striv(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	UINT32 screen_update_joinem(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 
 	INTERRUPT_GEN_MEMBER(joinem_vblank_irq);
 	void jack_draw_sprites( bitmap_ind16 &bitmap, const rectangle &cliprect );

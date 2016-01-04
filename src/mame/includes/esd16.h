@@ -38,7 +38,6 @@ public:
 	required_shared_ptr<UINT16> m_head_layersize;
 	required_shared_ptr<UINT16> m_headpanic_platform_x;
 	required_shared_ptr<UINT16> m_headpanic_platform_y;
-//  UINT16 *       m_paletteram;  // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t       *m_tilemap_0_16x16;
@@ -69,9 +68,9 @@ public:
 	TILE_GET_INFO_MEMBER(get_tile_info_0_16x16);
 	TILE_GET_INFO_MEMBER(get_tile_info_1);
 	TILE_GET_INFO_MEMBER(get_tile_info_1_16x16);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_hedpanic(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	DECOSPR_PRIORITY_CB_MEMBER(hedpanic_pri_callback);
 };

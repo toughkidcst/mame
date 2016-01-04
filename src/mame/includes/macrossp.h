@@ -28,10 +28,10 @@ public:
 		m_text_linezoom(*this, "text_linezoom"),
 		m_text_videoregs(*this, "text_videoregs"),
 
-		m_paletteram(*this, "paletteram"),
 		m_mainram(*this, "mainram"),
 		m_maincpu(*this, "maincpu"),
 		m_audiocpu(*this, "audiocpu"),
+		m_screen(*this, "screen"),
 		m_gfxdecode(*this, "gfxdecode"),
 		m_palette(*this, "palette")
 	{
@@ -51,10 +51,9 @@ public:
 	required_shared_ptr<UINT32> m_text_videoram;
 	required_shared_ptr<UINT32> m_text_linezoom;
 	required_shared_ptr<UINT32> m_text_videoregs;
-	required_shared_ptr<UINT32> m_paletteram;
 	required_shared_ptr<UINT32> m_mainram;
-	UINT32 *         m_spriteram_old;
-	UINT32 *         m_spriteram_old2;
+	std::unique_ptr<UINT32[]>         m_spriteram_old;
+	std::unique_ptr<UINT32[]>         m_spriteram_old2;
 
 	/* video-related */
 	tilemap_t  *m_scra_tilemap;
@@ -65,22 +64,19 @@ public:
 	/* misc */
 	int              m_sndpending;
 	int              m_snd_toggle;
-	INT32            m_fade_effect;
-	INT32            m_old_fade;
 
 	/* devices */
 	required_device<cpu_device> m_maincpu;
 	required_device<cpu_device> m_audiocpu;
+	required_device<screen_device> m_screen;
 	required_device<gfxdecode_device> m_gfxdecode;
 	required_device<palette_device> m_palette;
 
-	DECLARE_WRITE32_MEMBER(paletteram32_macrossp_w);
 	DECLARE_READ32_MEMBER(macrossp_soundstatus_r);
 	DECLARE_WRITE32_MEMBER(macrossp_soundcmd_w);
 	DECLARE_READ16_MEMBER(macrossp_soundcmd_r);
-	DECLARE_WRITE32_MEMBER(macrossp_palette_fade_w);
+	DECLARE_WRITE16_MEMBER(palette_fade_w);
 	DECLARE_WRITE32_MEMBER(macrossp_speedup_w);
-	DECLARE_WRITE32_MEMBER(quizmoon_speedup_w);
 	DECLARE_WRITE32_MEMBER(macrossp_scra_videoram_w);
 	DECLARE_WRITE32_MEMBER(macrossp_scrb_videoram_w);
 	DECLARE_WRITE32_MEMBER(macrossp_scrc_videoram_w);
@@ -91,14 +87,12 @@ public:
 	TILE_GET_INFO_MEMBER(get_macrossp_scrb_tile_info);
 	TILE_GET_INFO_MEMBER(get_macrossp_scrc_tile_info);
 	TILE_GET_INFO_MEMBER(get_macrossp_text_tile_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_macrossp(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	void screen_eof_macrossp(screen_device &screen, bool state);
-	void draw_sprites(bitmap_rgb32 &bitmap, const rectangle &cliprect, int priority );
-	void draw_layer( screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect, int layer, int line );
-	void sortlayers(int *layer,int *pri);
-	void update_colors(  );
+	void draw_sprites(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
+	void draw_layer(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect, int layer, int linem, int pri);
 	DECLARE_WRITE_LINE_MEMBER(irqhandler);
 };

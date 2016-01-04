@@ -28,9 +28,6 @@ public:
 		m_screen(*this, "screen")
 	{ }
 
-	/* memory pointers */
-//  UINT16 *   m_paletteram;    // currently this uses generic palette handling
-
 	/* video-related */
 	int       m_zoom_colorbase[2];
 	int       m_road_colorbase[2];
@@ -57,10 +54,8 @@ public:
 	DECLARE_WRITE16_MEMBER(overdriv_soundirq_w);
 	DECLARE_WRITE16_MEMBER(overdriv_cpuB_irq_x_w);
 	DECLARE_WRITE16_MEMBER(overdriv_cpuB_irq_y_w);
-	DECLARE_READ8_MEMBER(overdriv_1_sound_r);
-	DECLARE_READ8_MEMBER(overdriv_2_sound_r);
-	virtual void machine_start();
-	virtual void machine_reset();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
 	UINT32 screen_update_overdriv(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(cpuB_interrupt);
 	TIMER_DEVICE_CALLBACK_MEMBER(overdriv_cpuA_scanline);

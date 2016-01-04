@@ -22,11 +22,13 @@ enum {
 	VIDEO_MODE_NONE,
 	VIDEO_MODE_GDI,
 	VIDEO_MODE_DDRAW,
-	VIDEO_MODE_D3D,
+#if defined (USE_BGFX)
 	VIDEO_MODE_BGFX,
+#endif
 #if (USE_OPENGL)
 	VIDEO_MODE_OPENGL,
 #endif
+	VIDEO_MODE_D3D
 };
 
 #define GLSL_SHADER_MAX 10
@@ -148,7 +150,7 @@ public:
 	win_monitor_info(const HMONITOR handle, const char *monitor_device, float aspect);
 	virtual ~win_monitor_info();
 
-	virtual void refresh();
+	virtual void refresh() override;
 
 	// static
 

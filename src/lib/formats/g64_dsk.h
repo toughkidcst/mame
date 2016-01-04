@@ -18,27 +18,29 @@ class g64_format : public floppy_image_format_t {
 public:
 	g64_format();
 
-	virtual int identify(io_generic *io, UINT32 form_factor);
-	virtual bool load(io_generic *io, UINT32 form_factor, floppy_image *image);
-	virtual bool save(io_generic *io, floppy_image *image);
+	virtual int identify(io_generic *io, UINT32 form_factor) override;
+	virtual bool load(io_generic *io, UINT32 form_factor, floppy_image *image) override;
+	virtual bool save(io_generic *io, floppy_image *image) override;
 
-	virtual const char *name() const;
-	virtual const char *description() const;
-	virtual const char *extensions() const;
-	virtual bool supports_save() const { return true; }
+	virtual const char *name() const override;
+	virtual const char *description() const override;
+	virtual const char *extensions() const override;
+	virtual bool supports_save() const override { return true; }
 
 protected:
 	enum
 	{
-		SIGNATURE = 0x0,
-		VERSION = 0x8,
-		TRACK_COUNT = 0x9,
-		MAX_TRACK_SIZE = 0xa,
-		TRACK_OFFSET = 0xc,
-		SPEED_ZONE = 0x15c,
-		MASTERING = 0x2ac,
-		TRACK_DATA = 0x2ac,
-		TRACK_LENGTH = 0x1ef8
+		POS_SIGNATURE = 0x0,
+		POS_VERSION = 0x8,
+		POS_TRACK_COUNT = 0x9,
+		POS_MAX_TRACK_SIZE = 0xa,
+		POS_TRACK_OFFSET = 0xc
+	};
+
+	enum
+	{
+		TRACK_LENGTH = 0x1ef8,
+		TRACK_COUNT = 84
 	};
 
 	static const UINT32 c1541_cell_size[];

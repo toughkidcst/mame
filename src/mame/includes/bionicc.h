@@ -18,7 +18,6 @@ public:
 		m_txvideoram(*this, "txvideoram"),
 		m_fgvideoram(*this, "fgvideoram"),
 		m_bgvideoram(*this, "bgvideoram"),
-		m_paletteram(*this, "paletteram"),
 		m_maincpu(*this, "maincpu"),
 		m_gfxdecode(*this, "gfxdecode"),
 		m_palette(*this, "palette"),
@@ -30,7 +29,6 @@ public:
 	required_shared_ptr<UINT16> m_txvideoram;
 	required_shared_ptr<UINT16> m_fgvideoram;
 	required_shared_ptr<UINT16> m_bgvideoram;
-	required_shared_ptr<UINT16> m_paletteram;
 
 	/* video-related */
 	tilemap_t   *m_tx_tilemap;
@@ -49,15 +47,15 @@ public:
 	DECLARE_WRITE16_MEMBER(bionicc_bgvideoram_w);
 	DECLARE_WRITE16_MEMBER(bionicc_fgvideoram_w);
 	DECLARE_WRITE16_MEMBER(bionicc_txvideoram_w);
-	DECLARE_WRITE16_MEMBER(bionicc_paletteram_w);
 	DECLARE_WRITE16_MEMBER(bionicc_scroll_w);
 	DECLARE_WRITE16_MEMBER(bionicc_gfxctrl_w);
 	TILE_GET_INFO_MEMBER(get_bg_tile_info);
 	TILE_GET_INFO_MEMBER(get_fg_tile_info);
 	TILE_GET_INFO_MEMBER(get_tx_tile_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
+	DECLARE_PALETTE_DECODER(RRRRGGGGBBBBIIII);
 	UINT32 screen_update_bionicc(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	TIMER_DEVICE_CALLBACK_MEMBER(bionicc_scanline);
 	required_device<cpu_device> m_maincpu;

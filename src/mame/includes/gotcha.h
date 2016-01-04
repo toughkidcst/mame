@@ -27,7 +27,6 @@ public:
 	required_shared_ptr<UINT16> m_bgvideoram;
 	required_shared_ptr<UINT16> m_spriteram;
 	optional_device<decospr_device> m_sprgen;
-//  UINT16 *    m_paletteram; // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t     *m_bg_tilemap;
@@ -48,9 +47,9 @@ public:
 	TILEMAP_MAPPER_MEMBER(gotcha_tilemap_scan);
 	TILE_GET_INFO_MEMBER(fg_get_tile_info);
 	TILE_GET_INFO_MEMBER(bg_get_tile_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_gotcha(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	inline void get_tile_info( tile_data &tileinfo, int tile_index ,UINT16 *vram, int color_offs);
 	required_device<cpu_device> m_maincpu;

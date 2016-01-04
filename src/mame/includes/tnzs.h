@@ -35,7 +35,18 @@ public:
 		m_dac(*this, "dac"),
 		m_samples(*this, "samples"),
 		m_palette(*this, "palette"),
-		m_mainbank(*this, "mainbank")
+		m_mainbank(*this, "mainbank"),
+		m_subbank(*this, "subbank"),
+		m_audiobank(*this, "audiobank"),
+		m_dswa(*this, "DSWA"),
+		m_dswb(*this, "DSWB"),
+		m_in0(*this, "IN0"),
+		m_in1(*this, "IN1"),
+		m_in2(*this, "IN2"),
+		m_coin1(*this, "COIN1"),
+		m_coin2(*this, "COIN2"),
+		m_an1(*this, "AN1"),
+		m_an2(*this, "AN2")
 		{ }
 
 	/* devices */
@@ -48,9 +59,20 @@ public:
 	optional_device<samples_device> m_samples;
 	required_device<palette_device> m_palette;
 	optional_device<address_map_bank_device> m_mainbank;
+	optional_memory_bank m_subbank; /* optional because of reuse from cchance.c */
+	optional_memory_bank m_audiobank;
+	required_ioport m_dswa;
+	required_ioport m_dswb;
+	required_ioport m_in0;
+	required_ioport m_in1;
+	required_ioport m_in2;
+	optional_ioport m_coin1;
+	optional_ioport m_coin2;
+	optional_ioport m_an1;
+	optional_ioport m_an2;
 
 	/* sound-related */
-	INT16    *m_sampledata[MAX_SAMPLES];
+	std::unique_ptr<INT16[]>    m_sampledata[MAX_SAMPLES];
 	int      m_samplesize[MAX_SAMPLES];
 
 	/* misc / mcu */
@@ -85,7 +107,6 @@ public:
 	DECLARE_WRITE8_MEMBER(mcu_arknoid2_w);
 	DECLARE_READ8_MEMBER(mcu_extrmatn_r);
 	DECLARE_WRITE8_MEMBER(mcu_extrmatn_w);
-	DECLARE_WRITE8_MEMBER(tnzs_sync_kludge_w);
 	DECLARE_READ8_MEMBER(kageki_csport_r);
 	DECLARE_WRITE8_MEMBER(kageki_csport_w);
 	DECLARE_WRITE8_MEMBER(kabukiz_sound_bank_w);
@@ -114,9 +135,7 @@ public:
 	void screen_eof_tnzs(screen_device &screen, bool state);
 
 	INTERRUPT_GEN_MEMBER(arknoid2_interrupt);
-	TIMER_CALLBACK_MEMBER(kludge_callback);
 
-	void tnzs_postload();
 	void mcu_reset();
 	void mcu_handle_coins(int coin);
 };

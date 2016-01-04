@@ -32,8 +32,8 @@ struct road_info
 	INT32           xoffs;                          /* X scroll offset */
 	void            (*draw)(struct road_info *info, bitmap_ind16 &bitmap, const rectangle &cliprect, int priority);
 	UINT16 *        roadram;                        /* pointer to roadram pointer */
-	UINT16 *        buffer;                         /* buffered roadram pointer */
-	UINT8 *         gfx;                            /* expanded road graphics */
+	std::unique_ptr<UINT16[]>        buffer;                         /* buffered roadram pointer */
+	std::unique_ptr<UINT8[]>          gfx;                            /* expanded road graphics */
 };
 
 
@@ -45,6 +45,8 @@ public:
 	~segaic16_road_device() {}
 
 	UINT16 *segaic16_roadram_0;
+	void segaic16_road_hangon_decode(running_machine &machine, struct road_info *info);
+	void segaic16_road_outrun_decode(running_machine &machine, struct road_info *info);
 
 	struct road_info segaic16_road[SEGAIC16_MAX_ROADS];
 	void segaic16_road_init(running_machine &machine, int which, int type, int colorbase1, int colorbase2, int colorbase3, int xoffs);
@@ -57,9 +59,9 @@ public:
 
 protected:
 	// device-level overrides
-	virtual void device_config_complete();
-	virtual void device_start();
-	virtual void device_reset();
+	virtual void device_config_complete() override;
+	virtual void device_start() override;
+	virtual void device_reset() override;
 
 private:
 	// internal state

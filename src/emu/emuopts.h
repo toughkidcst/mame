@@ -31,7 +31,7 @@ enum
 	OPTION_PRIORITY_DEBUG_INI,
 	OPTION_PRIORITY_ORIENTATION_INI,
 	OPTION_PRIORITY_SYSTYPE_INI,
-	OPTION_PRIORITY_VECTOR_INI,
+	OPTION_PRIORITY_SCREEN_INI,
 	OPTION_PRIORITY_SOURCE_INI,
 	OPTION_PRIORITY_GPARENT_INI,
 	OPTION_PRIORITY_PARENT_INI,
@@ -119,7 +119,9 @@ enum
 
 // core vector options
 #define OPTION_ANTIALIAS            "antialias"
-#define OPTION_BEAM                 "beam"
+#define OPTION_BEAM_WIDTH_MIN       "beam_width_min"
+#define OPTION_BEAM_WIDTH_MAX       "beam_width_max"
+#define OPTION_BEAM_INTENSITY_WEIGHT   "beam_intensity_weight"
 #define OPTION_FLICKER              "flicker"
 
 // core sound options
@@ -186,11 +188,6 @@ enum
 #define OPTION_AUTOBOOT_COMMAND     "autoboot_command"
 #define OPTION_AUTOBOOT_DELAY       "autoboot_delay"
 #define OPTION_AUTOBOOT_SCRIPT      "autoboot_script"
-
-#define OPTION_HTTP                 "http"
-#define OPTION_HTTP_PORT            "http_port"
-#define OPTION_HTTP_PATH            "http_path"
-#define OPTION_CONSOLE              "console"
 
 //**************************************************************************
 //  TYPE DEFINITIONS
@@ -266,9 +263,9 @@ public:
 	int frameskip() const { return int_value(OPTION_FRAMESKIP); }
 	int seconds_to_run() const { return int_value(OPTION_SECONDS_TO_RUN); }
 	bool throttle() const { return bool_value(OPTION_THROTTLE); }
-	bool sleep() const { return bool_value(OPTION_SLEEP); }
+	bool sleep() const { return m_sleep; }
 	float speed() const { return float_value(OPTION_SPEED); }
-	bool refresh_speed() const { return bool_value(OPTION_REFRESHSPEED); }
+	bool refresh_speed() const { return m_refresh_speed; }
 
 	// core rotation options
 	bool rotate() const { return bool_value(OPTION_ROTATE); }
@@ -296,7 +293,9 @@ public:
 
 	// core vector options
 	bool antialias() const { return bool_value(OPTION_ANTIALIAS); }
-	float beam() const { return float_value(OPTION_BEAM); }
+	float beam_width_min() const { return float_value(OPTION_BEAM_WIDTH_MIN); }
+	float beam_width_max() const { return float_value(OPTION_BEAM_WIDTH_MAX); }
+	float beam_intensity_weight() const { return float_value(OPTION_BEAM_INTENSITY_WEIGHT); }
 	float flicker() const { return float_value(OPTION_FLICKER); }
 
 	// core sound options
@@ -327,8 +326,8 @@ public:
 	bool ui_active() const { return bool_value(OPTION_UI_ACTIVE); }
 	bool offscreen_reload() const { return bool_value(OPTION_OFFSCREEN_RELOAD); }
 	bool natural_keyboard() const { return bool_value(OPTION_NATURAL_KEYBOARD); }
-	bool joystick_contradictory() const { return bool_value(OPTION_JOYSTICK_CONTRADICTORY); }
-	int coin_impulse() const { return int_value(OPTION_COIN_IMPULSE); }
+	bool joystick_contradictory() const { return m_joystick_contradictory; }
+	int coin_impulse() const { return m_coin_impulse; }
 
 	// core debugging options
 	bool log() const { return bool_value(OPTION_LOG); }
@@ -362,11 +361,6 @@ public:
 	int autoboot_delay() const { return int_value(OPTION_AUTOBOOT_DELAY); }
 	const char *autoboot_script() const { return value(OPTION_AUTOBOOT_SCRIPT); }
 
-	bool http() const { return bool_value(OPTION_HTTP); }
-	const char *http_port() const { return value(OPTION_HTTP_PORT); }
-	const char *http_path() const { return value(OPTION_HTTP_PATH); }
-	bool console() const { return bool_value(OPTION_CONSOLE); }
-
 	// FIXME: Couriersud: This should be in image_device_exit
 	void remove_device_options();
 
@@ -380,9 +374,18 @@ private:
 	void update_slot_options();
 
 	// INI parsing helper
-	bool parse_one_ini(const char *basename, int priority, std::string *error_string = NULL);
+	bool parse_one_ini(const char *basename, int priority, std::string *error_string = nullptr);
+
+	// cache frequently used options in members
+	void update_cached_options();
 
 	static const options_entry s_option_entries[];
+
+	// cached options
+	int m_coin_impulse;
+	bool m_joystick_contradictory;
+	bool m_sleep;
+	bool m_refresh_speed;
 };
 
 

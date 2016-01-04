@@ -57,31 +57,23 @@ function createProjects_ldplayer_ldplayer(_target, _subtarget)
 	kind (LIBTYPE)
 	uuid (os.uuid("drvldplayer"))
 	
-	options {
-		"ForceCPP",
-	}
-	
 	includedirs {
 		MAME_DIR .. "src/osd",
 		MAME_DIR .. "src/emu",
+		MAME_DIR .. "src/devices",
 		MAME_DIR .. "src/mame",
 		MAME_DIR .. "src/lib",
 		MAME_DIR .. "src/lib/util",
 		MAME_DIR .. "3rdparty",
 		GEN_DIR  .. "mame/layout",
 	}
-	if _OPTIONS["with-bundled-zlib"] then
-		includedirs {
-			MAME_DIR .. "3rdparty/zlib",
-		}
-	end
 
 	files{
-		MAME_DIR .. "src/emu/drivers/emudummy.c",
+		MAME_DIR .. "src/emu/drivers/emudummy.cpp",
 	}
 
 	dependency {
-		{ MAME_DIR .. "src/emu/drivers/emudummy.c", GEN_DIR .. "ldplayer/layout/pr8210.lh" },
+		{ MAME_DIR .. "src/emu/drivers/emudummy.cpp", GEN_DIR .. "ldplayer/layout/pr8210.lh" },
 	}
 
 	custombuildtask {

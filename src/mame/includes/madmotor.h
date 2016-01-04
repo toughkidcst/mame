@@ -24,7 +24,6 @@ public:
 
 	/* memory pointers */
 	required_shared_ptr<UINT16> m_spriteram;
-//  UINT16 *        m_paletteram;     // this currently uses generic palette handlers
 
 	/* video-related */
 	int             m_flipscreen;
@@ -38,8 +37,8 @@ public:
 	required_device<deco_mxc06_device> m_spritegen;
 	DECLARE_WRITE16_MEMBER(madmotor_sound_w);
 	DECLARE_DRIVER_INIT(madmotor);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_madmotor(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 };

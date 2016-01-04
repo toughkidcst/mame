@@ -16,8 +16,7 @@ public:
 		m_scroll_ram(*this, "scroll_ram"),
 		m_videoram(*this, "videoram"),
 		m_back_data(*this, "back_data"),
-		m_fore_data(*this, "fore_data"),
-		m_generic_paletteram_16(*this, "paletteram") { }
+		m_fore_data(*this, "fore_data") { }
 
 	required_device<cpu_device> m_maincpu;
 	required_device<seibu_sound_device> m_seibu_sound;
@@ -29,7 +28,6 @@ public:
 	required_shared_ptr<UINT16> m_videoram;
 	required_shared_ptr<UINT16> m_back_data;
 	required_shared_ptr<UINT16> m_fore_data;
-	required_shared_ptr<UINT16> m_generic_paletteram_16;
 
 	tilemap_t *m_bg_layer;
 	tilemap_t *m_fg_layer;
@@ -43,7 +41,6 @@ public:
 	int m_old_back;
 	int m_old_fore;
 
-	DECLARE_WRITE16_MEMBER(paletteram_w);
 	DECLARE_WRITE16_MEMBER(background_w);
 	DECLARE_WRITE16_MEMBER(foreground_w);
 	DECLARE_WRITE16_MEMBER(text_w);
@@ -54,7 +51,7 @@ public:
 	TILE_GET_INFO_MEMBER(get_fg_tile_info);
 	TILE_GET_INFO_MEMBER(get_tx_tile_info);
 
-	virtual void video_start();
+	virtual void video_start() override;
 	DECLARE_DRIVER_INIT(dynduke);
 
 	UINT32 screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);

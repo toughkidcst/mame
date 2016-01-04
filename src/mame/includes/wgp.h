@@ -34,7 +34,12 @@ public:
 		m_tc0140syt(*this, "tc0140syt"),
 		m_tc0220ioc(*this, "tc0220ioc"),
 		m_gfxdecode(*this, "gfxdecode"),
-		m_palette(*this, "palette") { }
+		m_palette(*this, "palette"),
+		m_z80bank(*this, "z80bank"),
+		m_steer(*this, "STEER"),
+		m_unknown(*this, "UNKNOWN"),
+		m_fake(*this, "FAKE")
+	{ }
 
 	/* memory pointers */
 	required_shared_ptr<UINT16> m_spritemap;
@@ -66,6 +71,10 @@ public:
 	required_device<tc0220ioc_device> m_tc0220ioc;
 	required_device<gfxdecode_device> m_gfxdecode;
 	required_device<palette_device> m_palette;
+	required_memory_bank m_z80bank;
+	optional_ioport m_steer;
+	optional_ioport m_unknown;
+	optional_ioport m_fake;
 
 	DECLARE_WRITE16_MEMBER(cpua_ctrl_w);
 	DECLARE_READ16_MEMBER(lan_status_r);
@@ -84,9 +93,9 @@ public:
 	TILE_GET_INFO_MEMBER(get_piv0_tile_info);
 	TILE_GET_INFO_MEMBER(get_piv1_tile_info);
 	TILE_GET_INFO_MEMBER(get_piv2_tile_info);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	DECLARE_VIDEO_START(wgp2);
 	UINT32 screen_update_wgp(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(wgp_cpub_interrupt);
@@ -99,5 +108,5 @@ public:
 	DECLARE_WRITE_LINE_MEMBER(irqhandler);
 
 protected:
-	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr);
+	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr) override;
 };

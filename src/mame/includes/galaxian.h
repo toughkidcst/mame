@@ -118,7 +118,7 @@ public:
 	UINT32 m_star_rng_origin;
 	UINT32 m_star_rng_origin_frame;
 	rgb_t m_star_color[64];
-	UINT8 *m_stars;
+	std::unique_ptr<UINT8[]> m_stars;
 	UINT8 m_stars_enabled;
 	UINT8 m_stars_blink_state;
 	rgb_t m_bullet_color[8];
@@ -158,7 +158,8 @@ public:
 	DECLARE_WRITE8_MEMBER(frogger_ppi8255_w);
 	DECLARE_READ8_MEMBER(frogger_ay8910_r);
 	DECLARE_WRITE8_MEMBER(frogger_ay8910_w);
-	DECLARE_WRITE8_MEMBER(froggrmc_sound_control_w);
+	IRQ_CALLBACK_MEMBER(froggermc_audiocpu_irq_ack);
+	DECLARE_WRITE8_MEMBER(froggermc_sound_control_w);
 	DECLARE_READ8_MEMBER(frogf_ppi8255_r);
 	DECLARE_WRITE8_MEMBER(frogf_ppi8255_w);
 	DECLARE_READ8_MEMBER(turtles_ppi8255_0_r);
@@ -242,9 +243,10 @@ public:
 	DECLARE_DRIVER_INIT(sfx);
 	DECLARE_DRIVER_INIT(atlantis);
 	DECLARE_DRIVER_INIT(scobra);
+	DECLARE_DRIVER_INIT(scobrae);
 	DECLARE_DRIVER_INIT(losttomb);
 	DECLARE_DRIVER_INIT(frogger);
-	DECLARE_DRIVER_INIT(froggrmc);
+	DECLARE_DRIVER_INIT(froggermc);
 	DECLARE_DRIVER_INIT(froggers);
 	DECLARE_DRIVER_INIT(quaak);
 	DECLARE_DRIVER_INIT(turtles);
@@ -256,8 +258,9 @@ public:
 	DECLARE_DRIVER_INIT(moonwar);
 	DECLARE_DRIVER_INIT(ghostmun);
 	DECLARE_DRIVER_INIT(froggrs);
+	DECLARE_DRIVER_INIT(warofbugg);
 	TILE_GET_INFO_MEMBER(bg_get_tile_info);
-	virtual void video_start();
+	virtual void video_start() override;
 	DECLARE_PALETTE_INIT(galaxian);
 	DECLARE_PALETTE_INIT(moonwar);
 	void tenspot_set_game_bank(int bank, int from_game);
@@ -282,8 +285,6 @@ public:
 	void turtles_draw_background(bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	void frogger_draw_background(bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	void quaak_draw_background(bitmap_rgb32 &bitmap, const rectangle &cliprect);
-	int flip_and_clip(rectangle &draw, int xstart, int xend, const rectangle &cliprect);
-	void amidar_draw_background(bitmap_rgb32 &bitmap, const rectangle &cliprect);
 	inline void galaxian_draw_pixel(bitmap_rgb32 &bitmap, const rectangle &cliprect, int y, int x, rgb_t color);
 	void galaxian_draw_bullet(bitmap_rgb32 &bitmap, const rectangle &cliprect, int offs, int x, int y);
 	void mshuttle_draw_bullet(bitmap_rgb32 &bitmap, const rectangle &cliprect, int offs, int x, int y);
@@ -312,6 +313,7 @@ public:
 	void decode_checkman();
 	void decode_dingoe();
 	void decode_frogger_sound();
+	void decode_froggermc_sound();
 	void decode_frogger_gfx();
 	void decode_anteater_gfx();
 	void decode_losttomb_gfx();

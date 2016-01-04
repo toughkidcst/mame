@@ -23,8 +23,6 @@ public:
 	required_shared_ptr<UINT8> m_spriteram;
 	required_shared_ptr<UINT8> m_scrlram;
 	optional_shared_ptr<UINT8> m_workram;
-//  UINT8 *  m_paletteram;    // currently this uses generic palette handling
-//  UINT8 *  m_paletteram_2;  // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t  *m_bg_tilemap;
@@ -120,7 +118,7 @@ public:
 	TILE_GET_INFO_MEMBER(get_tile_info);
 	TILE_GET_INFO_MEMBER(victnine_get_tile_info);
 	TILE_GET_INFO_MEMBER(get_rumba_tile_info);
-	virtual void machine_start();
+	virtual void machine_start() override;
 	DECLARE_MACHINE_RESET(flstory);
 	DECLARE_VIDEO_START(flstory);
 	DECLARE_VIDEO_START(victnine);

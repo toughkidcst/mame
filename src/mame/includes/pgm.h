@@ -41,10 +41,9 @@ public:
 	UINT16 *      m_bg_videoram;
 	UINT16 *      m_tx_videoram;
 	UINT16 *      m_rowscrollram;
-	UINT8  *      m_sprite_a_region;
+	std::unique_ptr<UINT8[]>      m_sprite_a_region;
 	size_t        m_sprite_a_region_size;
-	UINT16 *      m_spritebufferram; // buffered spriteram
-//  UINT16 *      m_paletteram;    // currently this uses generic palette handling
+	std::unique_ptr<UINT16[]>     m_spritebufferram; // buffered spriteram
 
 	/* video-related */
 	tilemap_t       *m_bg_tilemap;
@@ -131,7 +130,6 @@ public:
 	void asic3_compute_hold(int,int);
 	DECLARE_READ16_MEMBER( pgm_asic3_r );
 	DECLARE_WRITE16_MEMBER( pgm_asic3_w );
-	DECLARE_WRITE16_MEMBER( pgm_asic3_reg_w );
 };
 
 
@@ -317,7 +315,7 @@ public:
 	}
 	// svg
 	int           m_svg_ram_sel;
-	UINT32 *      m_svg_shareram[2];    //for 5585G MACHINE
+	std::unique_ptr<UINT32[]>      m_svg_shareram[2];    //for 5585G MACHINE
 
 	UINT32        m_svg_latchdata_68k_w;
 	UINT32        m_svg_latchdata_arm_w;
@@ -475,7 +473,8 @@ ADDRESS_MAP_EXTERN( pgm_base_mem, 16 );
 
 INPUT_PORTS_EXTERN( orlegend );
 INPUT_PORTS_EXTERN( orlegendt );
-INPUT_PORTS_EXTERN( orld105k );
+INPUT_PORTS_EXTERN( orlegendk );
+
 
 MACHINE_CONFIG_EXTERN( pgm_asic3 );
 

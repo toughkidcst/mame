@@ -166,7 +166,7 @@ protected:
 	virtual void state_string_export(const device_state_entry &entry, std::string &str);
 
 	// internal operation overrides
-	virtual void interface_post_start();
+	virtual void interface_post_start() override;
 
 	// find the entry for a given index
 	const device_state_entry *state_find_entry(int index);
@@ -195,9 +195,9 @@ typedef device_interface_iterator<device_state_interface> state_interface_iterat
 //  or 0 if no state object exists
 //-------------------------------------------------
 
-inline offs_t device_t::safe_pc()
+inline offs_t device_t::safe_pc() const
 {
-	return (m_state != NULL) ? m_state->pc() : 0;
+	return (m_state != nullptr) ? m_state->pc() : 0;
 }
 
 
@@ -206,9 +206,9 @@ inline offs_t device_t::safe_pc()
 //  base or 0 if no state object exists
 //-------------------------------------------------
 
-inline offs_t device_t::safe_pcbase()
+inline offs_t device_t::safe_pcbase() const
 {
-	return (m_state != NULL) ? m_state->pcbase() : 0;
+	return (m_state != nullptr) ? m_state->pcbase() : 0;
 }
 
 

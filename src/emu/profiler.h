@@ -71,7 +71,7 @@ enum profile_type
 	PROFILER_IDLE,
 	PROFILER_TOTAL
 };
-DECLARE_ENUM_OPERATORS(profile_type);
+DECLARE_ENUM_OPERATORS(profile_type)
 
 
 
@@ -91,7 +91,7 @@ public:
 	// getters
 	bool enabled() const
 	{
-		return m_filoptr != NULL;
+		return m_filoptr != nullptr;
 	}
 	const char *text(running_machine &machine);
 

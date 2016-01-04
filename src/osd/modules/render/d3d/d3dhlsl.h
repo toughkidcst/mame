@@ -20,6 +20,8 @@
 //  TYPE DEFINITIONS
 //============================================================
 
+struct slider_state;
+
 namespace d3d
 {
 class effect;
@@ -35,8 +37,9 @@ public:
 		UT_VEC2,
 		UT_FLOAT,
 		UT_INT,
+		UT_BOOL,
 		UT_MATRIX,
-		UT_SAMPLER,
+		UT_SAMPLER
 	} uniform_type;
 
 	enum
@@ -44,6 +47,12 @@ public:
 		CU_SCREEN_DIMS = 0,
 		CU_SOURCE_DIMS,
 		CU_SOURCE_RECT,
+		CU_TARGET_DIMS,
+		CU_QUAD_DIMS,
+
+		CU_ORIENTATION_SWAP,
+		CU_ROTATION_SWAP,
+		CU_ROTATION_TYPE,
 
 		CU_NTSC_CCFREQ,
 		CU_NTSC_A,
@@ -77,6 +86,7 @@ public:
 		CU_POST_VIGNETTING,
 		CU_POST_CURVATURE,
 		CU_POST_ROUND_CORNER,
+		CU_POST_SMOOTH_BORDER,
 		CU_POST_REFLECTION,
 		CU_POST_SHADOW_ALPHA,
 		CU_POST_SHADOW_COUNT,
@@ -96,7 +106,7 @@ public:
 		CU_BLOOM_LVL4567_WEIGHTS,
 		CU_BLOOM_LVL89A_WEIGHTS,
 
-		CU_COUNT,
+		CU_COUNT
 	};
 
 	uniform(effect *shader, const char *name, uniform_type type, int id);
@@ -109,6 +119,7 @@ public:
 	void        set(float x, float y);
 	void        set(float x);
 	void        set(int x);
+	void        set(bool x);
 	void        set(matrix *mat);
 	void        set(texture *tex);
 
@@ -120,6 +131,7 @@ protected:
 
 	float       m_vec[4];
 	int         m_ival;
+	bool        m_bval;
 	matrix      *m_mval;
 	texture     *m_texture;
 	int         m_count;
@@ -181,7 +193,9 @@ class renderer;
 /* in the future this will be moved into an OSD/emu shared buffer */
 struct hlsl_options
 {
+	bool                    params_init;
 	bool                    params_dirty;
+	int                     shadow_mask_tile_mode;
 	float                   shadow_mask_alpha;
 	char                    shadow_mask_texture[1024];
 	int                     shadow_mask_count_x;
@@ -192,6 +206,7 @@ struct hlsl_options
 	float                   shadow_mask_v_offset;
 	float                   curvature;
 	float                   round_corner;
+	float                   smooth_border;
 	float                   reflection;
 	float                   vignetting;
 	float                   scanline_alpha;
@@ -234,8 +249,9 @@ struct hlsl_options
 	float                   vector_length_ratio;
 
 	// Bloom
-	float                   vector_bloom_scale;
-	float                   raster_bloom_scale;
+	int                     bloom_blend_mode;
+	float                   bloom_scale;
+	float                   bloom_overdrive[3];
 	float                   bloom_level0_weight;
 	float                   bloom_level1_weight;
 	float                   bloom_level2_weight;
@@ -303,6 +319,14 @@ public:
 	// slider-related functions
 	slider_state *init_slider_list();
 
+	enum slider_screen_type
+	{
+		SLIDER_SCREEN_TYPE_NONE = 0,
+		SLIDER_SCREEN_TYPE_RASTER = 1,
+		SLIDER_SCREEN_TYPE_VECTOR = 2,
+		SLIDER_SCREEN_TYPE_LCD = 4
+	};
+
 	struct slider_desc
 	{
 		const char *        name;
@@ -310,12 +334,12 @@ public:
 		int                 defval;
 		int                 maxval;
 		int                 step;
+		int                 screen_type;
 		INT32(*adjustor)(running_machine &, void *, std::string *, INT32);
 	};
 
 private:
-	void                    blit(surface *dst, texture *src, surface *new_dst,
-									D3DPRIMITIVETYPE prim_type, UINT32 prim_index, UINT32 prim_count);
+	void                    blit(surface *dst, bool clear_dst, D3DPRIMITIVETYPE prim_type, UINT32 prim_index, UINT32 prim_count);
 	void                    enumerate_screens();
 
 	void                    end_avi_recording();
@@ -327,16 +351,23 @@ private:
 	cache_target *          find_cache_target(UINT32 screen_index, int width, int height);
 	void                    remove_cache_target(cache_target *cache);
 
+	rgb_t                   apply_color_convolution(rgb_t color);
+
 	// Shader passes
-	void                    ntsc_pass(render_target *rt, vec2f &texsize, vec2f &delta);
-	void                    color_convolution_pass(render_target *rt, vec2f &texsize, vec2f &sourcedims);
-	void                    prescale_pass(render_target *rt, vec2f &texsize, vec2f &sourcedims);
-	void                    deconverge_pass(render_target *rt, vec2f &texsize, vec2f &delta, vec2f &sourcedims);
-	void                    defocus_pass(render_target *rt, vec2f &texsize);
-	void                    phosphor_pass(render_target *rt, cache_target *ct, vec2f &texsize, bool focus_enable);
-	void                    post_pass(render_target *rt, vec2f &texsize, vec2f &delta, vec2f &sourcedims, poly_info *poly, int vertnum, bool prepare_bloom);
-	void                    bloom_pass(render_target *rt, vec2f &texsize, vec2f &delta, poly_info *poly, int vertnum);
-	void                    screen_pass(render_target *rt, vec2f &texsize, vec2f &delta, poly_info *poly, int vertnum);
+	int                     ntsc_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     color_convolution_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     prescale_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     deconverge_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     defocus_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     phosphor_pass(render_target *rt, cache_target *ct, int source_index, poly_info *poly, int vertnum);
+	int                     post_pass(render_target *rt, int source_index, poly_info *poly, int vertnum, bool prepare_bloom);
+	int                     downsample_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     bloom_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     distortion_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     vector_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     vector_buffer_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	int                     screen_pass(render_target *rt, int source_index, poly_info *poly, int vertnum);
+	void                    menu_pass(poly_info *poly, int vertnum);
 
 	base *                  d3dintf;                    // D3D interface
 
@@ -352,16 +383,14 @@ private:
 	int                     lastidx;                    // index of the last-encountered target
 	bool                    write_ini;                  // enable external ini saving
 	bool                    read_ini;                   // enable external ini loading
-	int                     prescale_force_x;           // prescale force x
-	int                     prescale_force_y;           // prescale force y
-	int                     prescale_size_x;            // prescale size x
-	int                     prescale_size_y;            // prescale size y
 	int                     hlsl_prescale_x;            // hlsl prescale x
 	int                     hlsl_prescale_y;            // hlsl prescale y
+	float                   bloom_dims[11][2];          // bloom texture dimensions
+	int                     bloom_count;                // count of used bloom textures
 	int                     preset;                     // preset, if relevant
 	bitmap_argb32           shadow_bitmap;              // shadow mask bitmap for post-processing shader
 	texture_info *          shadow_texture;             // shadow mask texture for post-processing shader
-	hlsl_options *          options;                    // current uniform state
+	hlsl_options *          options;                    // current options
 	D3DPRIMITIVETYPE        vecbuf_type;
 	UINT32                  vecbuf_index;
 	UINT32                  vecbuf_count;
@@ -395,9 +424,9 @@ private:
 	surface *               backbuffer;                 // pointer to our device's backbuffer
 	effect *                curr_effect;                // pointer to the currently active effect object
 	effect *                default_effect;             // pointer to the primary-effect object
-	effect *                simple_effect;              // pointer to the simple-effect object
 	effect *                prescale_effect;            // pointer to the prescale-effect object
 	effect *                post_effect;                // pointer to the post-effect object
+	effect *                distortion_effect;          // pointer to the distortion-effect object
 	effect *                focus_effect;               // pointer to the focus-effect object
 	effect *                phosphor_effect;            // pointer to the phosphor-effect object
 	effect *                deconverge_effect;          // pointer to the deconvergence-effect object
@@ -410,16 +439,15 @@ private:
 	vertex *                fsfx_vertices;              // pointer to our full-screen-quad object
 
 	texture_info *          curr_texture;
-	bool                    phosphor_passthrough;
-
-public:
+	render_target *         curr_render_target;
+	poly_info *             curr_poly;
 	render_target *         targethead;
 	cache_target *          cachehead;
 
 	static slider_desc      s_sliders[];
-	static hlsl_options     s_hlsl_presets[4];
+	static hlsl_options     last_options;               // last used options
 };
 
-};
+}
 
 #endif

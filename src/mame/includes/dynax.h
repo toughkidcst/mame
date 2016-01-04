@@ -36,7 +36,7 @@ public:
 	optional_device<msm6242_device> m_rtc;
 
 	// up to 8 layers, 2 images per layer (interleaved on screen)
-	UINT8 *  m_pixmap[8][2];
+	std::unique_ptr<UINT8[]>  m_pixmap[8][2];
 
 	/* irq */
 	typedef void (dynax_state::*irq_func)();    // some games trigger IRQ at blitter end, some don't
@@ -226,6 +226,8 @@ public:
 	DECLARE_DRIVER_INIT(blktouch);
 	DECLARE_DRIVER_INIT(mjelct3a);
 	DECLARE_DRIVER_INIT(mjreach);
+	DECLARE_DRIVER_INIT(maya_common);
+	DECLARE_DRIVER_INIT(mayac);
 	DECLARE_DRIVER_INIT(maya);
 
 	UINT32 screen_update_hanamai(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);

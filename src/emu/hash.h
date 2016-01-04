@@ -66,7 +66,7 @@ public:
 	bool operator!=(const hash_collection &rhs) const { return !(*this == rhs); }
 
 	// getters
-	bool flag(char flag) const { return (m_flags.find_first_of(flag) != -1); }
+	bool flag(char flag) const { return (m_flags.find_first_of(flag) != std::string::npos); }
 	const char *hash_types(std::string &buffer) const;
 
 	// hash manipulators
@@ -89,10 +89,10 @@ public:
 	bool from_internal_string(const char *string);
 
 	// creation
-	void begin(const char *types = NULL);
+	void begin(const char *types = nullptr);
 	void buffer(const UINT8 *data, UINT32 length);
 	void end();
-	void compute(const UINT8 *data, UINT32 length, const char *types = NULL) { begin(types); buffer(data, length); end(); }
+	void compute(const UINT8 *data, UINT32 length, const char *types = nullptr) { begin(types); buffer(data, length); end(); }
 
 private:
 	// internal helpers

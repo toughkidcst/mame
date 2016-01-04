@@ -22,7 +22,6 @@ public:
 
 	/* memory pointers */
 	required_shared_ptr<UINT8> m_k007121_ram;
-//  UINT8 *    paletteram;  // this currently uses generic palette handling
 
 	/* video-related */
 	tilemap_t    *m_k007121_tilemap[2];
@@ -45,9 +44,9 @@ public:
 	DECLARE_WRITE8_MEMBER(flkatck_k007121_regs_w);
 	TILE_GET_INFO_MEMBER(get_tile_info_A);
 	TILE_GET_INFO_MEMBER(get_tile_info_B);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_flkatck(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	INTERRUPT_GEN_MEMBER(flkatck_interrupt);
 	DECLARE_WRITE8_MEMBER(volume_callback);

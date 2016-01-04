@@ -34,8 +34,6 @@ public:
 	required_device<buffered_spriteram16_device> m_spriteram2;
 	required_device<vsystem_spr_device> m_spr;
 
-	//      UINT16 *  m_paletteram;   // currently this uses generic palette handling
-
 	/* video-related */
 	tilemap_t   *m_tilemap1;
 	tilemap_t   *m_tilemap2;
@@ -60,14 +58,13 @@ public:
 	DECLARE_DRIVER_INIT(crshrace);
 	TILE_GET_INFO_MEMBER(get_tile_info1);
 	TILE_GET_INFO_MEMBER(get_tile_info2);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_crshrace(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	void screen_eof_crshrace(screen_device &screen, bool state);
 	void draw_bg( screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect );
 	void draw_fg(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
-	void crshrace_patch_code( UINT16 offset );
 	DECLARE_WRITE_LINE_MEMBER(irqhandler);
 	required_device<cpu_device> m_maincpu;
 	required_device<gfxdecode_device> m_gfxdecode;

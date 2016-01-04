@@ -22,12 +22,6 @@ public:
 		m_k051316_3(*this, "k051316_3"),
 		m_k051960(*this, "k051960") { }
 
-	/* memory pointers */
-//  UINT16 *   m_paletteram;    // currently this uses generic palette handling
-
-	/* video-related */
-	int        m_sprite_colorbase;
-	int        m_zoom_colorbase[3];
 	int        m_bank0;
 	int        m_bank1;
 	int        m_bank2;
@@ -42,9 +36,8 @@ public:
 	DECLARE_WRITE16_MEMBER(sound_cmd_w);
 	DECLARE_WRITE16_MEMBER(sound_irq_trigger_w);
 	DECLARE_WRITE16_MEMBER(ultraman_gfxctrl_w);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
 	UINT32 screen_update_ultraman(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	K051316_CB_MEMBER(zoom_callback_1);
 	K051316_CB_MEMBER(zoom_callback_2);

@@ -48,7 +48,15 @@
 
 		float coverage = texcoordInRange(shadowcoord.xy/shadowcoord.w) * 0.4;
 		colorCoverage = vec3(-coverage, coverage, -coverage);
-		visibility = computeVisibility(u_shadowMap0, shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+		visibility = computeVisibility(s_shadowMap0
+						, shadowcoord
+						, u_shadowMapBias
+						, u_smSamplingParams
+						, texelSize
+						, u_shadowMapDepthMultiplier
+						, u_shadowMapMinVariance
+						, u_shadowMapHardness
+						);
 	}
 	else if (selection1)
 	{
@@ -56,7 +64,15 @@
 
 		float coverage = texcoordInRange(shadowcoord.xy/shadowcoord.w) * 0.4;
 		colorCoverage = vec3(coverage, coverage, -coverage);
-		visibility = computeVisibility(u_shadowMap1, shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize/2.0, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+		visibility = computeVisibility(s_shadowMap1
+						, shadowcoord
+						, u_shadowMapBias
+						, u_smSamplingParams
+						, texelSize/2.0
+						, u_shadowMapDepthMultiplier
+						, u_shadowMapMinVariance
+						, u_shadowMapHardness
+						);
 	}
 	else if (selection2)
 	{
@@ -64,7 +80,15 @@
 
 		float coverage = texcoordInRange(shadowcoord.xy/shadowcoord.w) * 0.4;
 		colorCoverage = vec3(-coverage, -coverage, coverage);
-		visibility = computeVisibility(u_shadowMap2, shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize/3.0, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+		visibility = computeVisibility(s_shadowMap2
+						, shadowcoord
+						, u_shadowMapBias
+						, u_smSamplingParams
+						, texelSize/3.0
+						, u_shadowMapDepthMultiplier
+						, u_shadowMapMinVariance
+						, u_shadowMapHardness
+						);
 	}
 	else //selection3
 	{
@@ -72,17 +96,25 @@
 
 		float coverage = texcoordInRange(shadowcoord.xy/shadowcoord.w) * 0.4;
 		colorCoverage = vec3(coverage, -coverage, -coverage);
-		visibility = computeVisibility(u_shadowMap3, shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize/4.0, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+		visibility = computeVisibility(s_shadowMap3
+						, shadowcoord
+						, u_shadowMapBias
+						, u_smSamplingParams
+						, texelSize/4.0
+						, u_shadowMapDepthMultiplier
+						, u_shadowMapMinVariance
+						, u_shadowMapHardness
+						);
 	}
 #elif SM_OMNI
 	vec2 texelSize = vec2_splat(u_shadowMapTexelSize/4.0);
 
 	vec4 faceSelection;
 	vec3 pos = v_position.xyz;
-	faceSelection.x = dot(u_tetraNormalGreen,  pos);
-	faceSelection.y = dot(u_tetraNormalYellow, pos);
-	faceSelection.z = dot(u_tetraNormalBlue,   pos);
-	faceSelection.w = dot(u_tetraNormalRed,    pos);
+	faceSelection.x = dot(u_tetraNormalGreen.xyz,  pos);
+	faceSelection.y = dot(u_tetraNormalYellow.xyz, pos);
+	faceSelection.z = dot(u_tetraNormalBlue.xyz,   pos);
+	faceSelection.w = dot(u_tetraNormalRed.xyz,    pos);
 
 	vec4 shadowcoord;
 	float faceMax = max(max(faceSelection.x, faceSelection.y), max(faceSelection.z, faceSelection.w));
@@ -115,14 +147,30 @@
 		colorCoverage = vec3(coverage, -coverage, -coverage);
 	}
 
-	visibility = computeVisibility(u_shadowMap0, shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+	visibility = computeVisibility(s_shadowMap0
+					, shadowcoord
+					, u_shadowMapBias
+					, u_smSamplingParams
+					, texelSize
+					, u_shadowMapDepthMultiplier
+					, u_shadowMapMinVariance
+					, u_shadowMapHardness
+					);
 #else
 	vec2 texelSize = vec2_splat(u_shadowMapTexelSize);
 
 	float coverage = texcoordInRange(v_shadowcoord.xy/v_shadowcoord.w) * 0.3;
 	colorCoverage = vec3(coverage, -coverage, -coverage);
 
-	visibility = computeVisibility(u_shadowMap0, v_shadowcoord, u_shadowMapBias, u_smSamplingParams, texelSize, u_shadowMapDepthMultiplier, u_shadowMapMinVariance, u_shadowMapHardness);
+	visibility = computeVisibility(s_shadowMap0
+					, v_shadowcoord
+					, u_shadowMapBias
+					, u_smSamplingParams
+					, texelSize
+					, u_shadowMapDepthMultiplier
+					, u_shadowMapMinVariance
+					, u_shadowMapHardness
+					);
 #endif
 
 	vec3 v = v_view;

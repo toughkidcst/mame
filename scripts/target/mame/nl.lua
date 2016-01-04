@@ -85,13 +85,11 @@ function createProjects_mame_nl(_target, _subtarget)
 	kind (LIBTYPE)
 	uuid (os.uuid("drv-mame-nl"))
 	
-	options {
-		"ForceCPP",
-	}
-	
 	includedirs {
 		MAME_DIR .. "src/osd",
 		MAME_DIR .. "src/emu",
+		MAME_DIR .. "src/devices",
+		MAME_DIR .. "src/lib/netlist",
 		MAME_DIR .. "src/mame",
 		MAME_DIR .. "src/lib",
 		MAME_DIR .. "src/lib/util",
@@ -99,24 +97,20 @@ function createProjects_mame_nl(_target, _subtarget)
 		GEN_DIR  .. "mame/layout",
 	}
 
-	if _OPTIONS["with-bundled-zlib"] then
-		includedirs {
-			MAME_DIR .. "3rdparty/zlib",
-		}
-	end
+files{
+	MAME_DIR .. "src/mame/drivers/pong.cpp",
+	MAME_DIR .. "src/mame/drivers/nl_pong.cpp",
+	MAME_DIR .. "src/mame/drivers/nl_pongd.cpp",
+	MAME_DIR .. "src/mame/drivers/nl_breakout.cpp",
 
-	files{
-		MAME_DIR .. "src/mame/drivers/pong.c",
-		MAME_DIR .. "src/mame/drivers/nl_pong.c",
-		MAME_DIR .. "src/mame/drivers/nl_pongd.c",
-		MAME_DIR .. "src/mame/drivers/nl_breakout.c",
+	MAME_DIR .. "src/mame/drivers/1942.cpp",
+	MAME_DIR .. "src/mame/includes/1942.h",
+	MAME_DIR .. "src/mame/video/1942.cpp",
+	MAME_DIR .. "src/mame/drivers/popeye.cpp",
+	MAME_DIR .. "src/mame/includes/popeye.h",
+	MAME_DIR .. "src/mame/video/popeye.cpp",
 
-		MAME_DIR .. "src/mame/drivers/1942.c",
-		MAME_DIR .. "src/mame/video/1942.c",
-		MAME_DIR .. "src/mame/drivers/popeye.c",
-		MAME_DIR .. "src/mame/video/popeye.c",
-
-	}
+}
 end
 
 function linkProjects_mame_nl(_target, _subtarget)

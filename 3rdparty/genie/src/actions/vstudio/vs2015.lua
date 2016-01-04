@@ -1,5 +1,5 @@
 --
--- vs2013.lua
+-- vs2015.lua
 -- Baseline support for Visual Studio 2015.
 --
 
@@ -57,5 +57,7 @@
 			solutionVersion = "14",
 			targetFramework = "4.5",
 			toolsVersion    = "14.0",
+			windowsTargetPlatformVersion = "8.1",
+			supports64bitEditContinue = true,
 		}
 	}

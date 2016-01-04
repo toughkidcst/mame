@@ -27,10 +27,6 @@ public:
 		m_k053252(*this, "k053252")
 		{ }
 
-	/* video-related */
-	int        m_sprite_colorbase;
-	int        m_zoom_colorbase;
-
 	/* misc */
 	int        m_readzoomroms;
 
@@ -46,14 +42,13 @@ public:
 	DECLARE_WRITE8_MEMBER(sound_arm_nmi_w);
 	DECLARE_READ8_MEMBER(pip_r);
 	DECLARE_WRITE_LINE_MEMBER(rollerg_irq_ack_w);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
 	UINT32 screen_update_rollerg(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	K05324X_CB_MEMBER(sprite_callback);
 	K051316_CB_MEMBER(zoom_callback);
 	DECLARE_WRITE8_MEMBER(banking_callback);
 
 protected:
-	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr);
+	virtual void device_timer(emu_timer &timer, device_timer_id id, int param, void *ptr) override;
 };

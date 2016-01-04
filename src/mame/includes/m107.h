@@ -6,6 +6,7 @@
 
 *************************************************************************/
 
+#include "machine/pic8259.h"
 
 struct pf_layer_info
 {
@@ -24,7 +25,9 @@ public:
 			m_screen(*this, "screen"),
 			m_palette(*this, "palette"),
 			m_spriteram(*this, "spriteram"),
-			m_vram_data(*this, "vram_data") { }
+			m_vram_data(*this, "vram_data"),
+			m_upd71059c(*this, "upd71059c")
+			{ }
 
 	required_device<cpu_device> m_maincpu;
 	required_device<cpu_device> m_soundcpu;
@@ -34,9 +37,9 @@ public:
 
 	required_shared_ptr<UINT16> m_spriteram;
 	required_shared_ptr<UINT16> m_vram_data;
+	required_device<pic8259_device> m_upd71059c;
 
 	// driver init
-	UINT8 m_irq_vectorbase;
 	UINT8 m_spritesystem;
 
 	int m_sound_status;
@@ -44,7 +47,7 @@ public:
 	UINT16 m_raster_irq_position;
 	pf_layer_info m_pf_layer[4];
 	UINT16 m_control[0x10];
-	UINT16 *m_buffered_spriteram;
+	std::unique_ptr<UINT16[]> m_buffered_spriteram;
 
 	DECLARE_WRITE16_MEMBER(coincounter_w);
 	DECLARE_WRITE16_MEMBER(bankswitch_w);
@@ -66,8 +69,8 @@ public:
 	DECLARE_DRIVER_INIT(firebarr);
 	DECLARE_DRIVER_INIT(dsoccr94);
 	DECLARE_DRIVER_INIT(wpksoc);
-	virtual void machine_start();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void video_start() override;
 
 	UINT32 screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	void draw_sprites(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);

@@ -28,7 +28,6 @@ public:
 	required_shared_ptr<UINT16> m_pf1_rowscroll;
 	required_shared_ptr<UINT16> m_pf2_rowscroll;
 	optional_device<decospr_device> m_sprgen;
-	//  UINT16 *  m_paletteram;    // currently this uses generic palette handling (in decocomn.c)
 
 	/* video-related */
 
@@ -38,6 +37,6 @@ public:
 	required_device<deco16ic_device> m_deco_tilegen1;
 	DECLARE_READ16_MEMBER(supbtime_controls_r);
 	DECLARE_WRITE16_MEMBER(sound_w);
-	virtual void machine_start();
+	virtual void machine_start() override;
 	UINT32 screen_update_supbtime(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 };

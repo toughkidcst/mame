@@ -35,7 +35,6 @@ public:
 	required_shared_ptr<UINT16> m_tileram_7;
 	required_shared_ptr<UINT16> m_tileram;
 	required_shared_ptr<UINT16> m_tilemap_reg;
-//  UINT16 *    m_paletteram; // currently this uses generic palette handling
 
 	/* video-related */
 	tilemap_t     *m_joetilemap;
@@ -77,9 +76,9 @@ public:
 	TILE_GET_INFO_MEMBER(get_joe_tile_info_5);
 	TILE_GET_INFO_MEMBER(get_joe_tile_info_6);
 	TILE_GET_INFO_MEMBER(get_joe_tile_info_7);
-	virtual void machine_start();
-	virtual void machine_reset();
-	virtual void video_start();
+	virtual void machine_start() override;
+	virtual void machine_reset() override;
+	virtual void video_start() override;
 	UINT32 screen_update_ashnojoe(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	DECLARE_WRITE_LINE_MEMBER(ym2203_irq_handler);
 	DECLARE_WRITE_LINE_MEMBER(ashnojoe_vclk_cb);
